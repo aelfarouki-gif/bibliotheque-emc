@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<!-- Bibliotheque Scientifique - MAJ 22/04/2026 16:05 - Cache partage sur Google Drive (stale-while-revalidate) -->
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>Bibliotheque Scientifique</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --dark:#1a1a2e;--dark2:#16213e;--accent:#0f3460;
+  --paper:#f5f2eb;--cream:#faf8f3;--cream2:#f0ede6;
+  --text1:#1a1a2e;--text2:#4a4a6a;--text3:#8888aa;
+  --border:#e8e4dc;--shadow:0 2px 12px rgba(0,0,0,0.08);
+}
+html,body{height:100%;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text1)}
+.hidden{display:none!important}
+.spinner{width:28px;height:28px;border:3px solid rgba(0,0,0,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* LOGIN */
+#screen-login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,#1a1a2e,#16213e,#0f3460);padding:20px}
+.login-card{background:var(--paper);border-radius:24px;padding:48px 44px;max-width:460px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,.45);text-align:center}
+.login-logo{font-size:52px;margin-bottom:18px}
+.login-title{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--text1);margin-bottom:10px}
+.login-sub{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:30px}
+.setup-steps{text-align:left;margin-bottom:30px;background:var(--cream2);border-radius:14px;padding:18px 22px;display:flex;flex-direction:column;gap:12px}
+.step{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text2)}
+.step-num{width:22px;height:22px;background:#22c55e;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.btn-signin{width:100%;padding:15px 24px;background:var(--text1);color:var(--paper);border:none;border-radius:14px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:14px}
+.btn-signin:hover{background:#2a2a4e;transform:translateY(-1px)}
+.btn-signin:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.btn-demo{background:transparent;border:1.5px solid var(--border);color:var(--text2);padding:11px 24px;border-radius:10px;font-size:13px;cursor:pointer;width:100%;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-demo:hover{border-color:var(--text2);color:var(--text1)}
+.err{margin-top:14px;padding:10px 14px;background:#fee2e2;border-radius:8px;color:#991b1b;font-size:13px;display:none;text-align:left;word-break:break-word}
+
+/* TOPBAR */
+.topbar{background:var(--dark);color:var(--paper);padding:0 24px;height:54px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;position:sticky;top:0;z-index:100}
+.topbar-l{display:flex;align-items:center;gap:14px}
+.t-logo{font-size:22px;cursor:pointer}
+.t-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;cursor:pointer}
+.t-title:hover{opacity:.75}
+.t-bc{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(245,242,235,.5)}
+.bc-sep{opacity:.4}
+.bc-link{color:rgba(245,242,235,.7);cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.bc-link:hover{color:var(--paper)}
+.bc-cur{color:rgba(245,242,235,.85);font-weight:500}
+.topbar-r{display:flex;align-items:center;gap:10px}
+.u-chip{display:flex;align-items:center;gap:8px}
+.u-av{width:30px;height:30px;border-radius:50%;background:#e94560;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;overflow:hidden;flex-shrink:0}
+.u-av img{width:100%;height:100%;object-fit:cover}
+.u-name{font-size:12px;color:rgba(245,242,235,.65)}
+.btn-top{padding:5px 12px;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:7px;font-size:12px;color:rgba(245,242,235,.5);cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.btn-top:hover{color:var(--paper);border-color:rgba(255,255,255,.3)}
+.sync-chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);border-radius:12px;font-size:11px;color:rgba(245,242,235,.8);font-family:'Inter',sans-serif;white-space:nowrap;transition:opacity .3s}
+.sync-chip .sync-dot{width:7px;height:7px;border-radius:50%;background:#34d399;animation:syncPulse 1.2s ease-in-out infinite}
+.sync-chip.done .sync-dot{animation:none}
+@keyframes syncPulse{0%,100%{opacity:.4;transform:scale(.9)}50%{opacity:1;transform:scale(1.15)}}
+
+/* HOME */
+#screen-home{min-height:calc(100vh - 54px)}
+.home-hero{background:linear-gradient(135deg,var(--dark),var(--dark2) 60%,var(--accent));padding:60px 40px 70px;text-align:center;color:var(--paper)}
+.home-hero h2{font-family:'Syne',sans-serif;font-size:36px;font-weight:800;margin-bottom:12px}
+.home-hero p{font-size:16px;opacity:.65;max-width:500px;margin:0 auto}
+.home-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:960px;margin:-48px auto 60px;padding:0 32px}
+.hcard{background:white;border-radius:20px;padding:36px 32px;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,0,0,.1);border:2px solid transparent;position:relative;overflow:hidden}
+.hcard::before{content:'';position:absolute;top:0;left:0;right:0;height:5px;border-radius:20px 20px 0 0}
+.hcard.blue::before{background:linear-gradient(90deg,#2563eb,#60a5fa)}
+.hcard.green::before{background:linear-gradient(90deg,#059669,#34d399)}
+.hcard.purple::before{background:linear-gradient(90deg,#7c3aed,#a78bfa)}
+.hcard:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(0,0,0,.15);border-color:var(--border)}
+.hcard-icon{font-size:44px;margin-bottom:18px}
+.hcard-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--text1);margin-bottom:8px}
+.hcard-desc{font-size:14px;color:var(--text2);line-height:1.6;margin-bottom:20px}
+.hcard-meta{font-size:12px;color:var(--text3);font-family:monospace}
+.hcard-arr{position:absolute;bottom:24px;right:24px;font-size:22px;opacity:.2;transition:opacity .2s}
+.hcard:hover .hcard-arr{opacity:.6}
+
+/* EBOOK SUB */
+#screen-ebook-home{min-height:calc(100vh - 54px)}
+.ebook-hero{background:linear-gradient(135deg,#059669,#065f46);padding:48px 40px 60px;text-align:center;color:white}
+.ebook-hero h2{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;margin-bottom:8px}
+.ebook-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;max-width:720px;margin:-40px auto 60px;padding:0 32px}
+.ecard{background:white;border-radius:18px;padding:32px 28px;cursor:pointer;transition:all .25s;box-shadow:0 8px 32px rgba(0,0,0,.1);border:2px solid transparent;text-align:center}
+.ecard:hover{transform:translateY(-5px);box-shadow:0 16px 40px rgba(0,0,0,.14);border-color:var(--border)}
+.ecard-flag{font-size:40px;margin-bottom:14px}
+.ecard-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text1);margin-bottom:6px}
+.ecard-desc{font-size:13px;color:var(--text2);line-height:1.5}
+
+/* BROWSER */
+#screen-browser{display:none;flex-direction:column;height:calc(100vh - 54px)}
+.brow-layout{display:flex;flex:1;overflow:hidden}
+.sidebar{width:240px;min-width:240px;background:var(--paper);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-search{padding:12px 14px;border-bottom:1px solid var(--border)}
+.sb-wrap{display:flex;align-items:center;gap:8px;background:var(--cream2);border-radius:8px;padding:7px 10px}
+.sb-input{background:transparent;border:none;outline:none;font-size:12px;color:var(--text1);width:100%;font-family:'Inter',sans-serif}
+.sb-nav{flex:1;overflow-y:auto;padding:10px 8px}
+.nav-lbl{font-size:10px;font-weight:600;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;padding:6px 8px 4px}
+.rub-btn{width:100%;background:transparent;border:none;border-radius:8px;padding:8px 10px;cursor:pointer;display:flex;align-items:center;gap:8px;text-align:left;transition:all .15s;margin-bottom:2px}
+.rub-btn:hover{background:var(--cream2)}
+.rub-btn.active{background:var(--dark);color:var(--paper)}
+.rub-icon{font-size:14px;flex-shrink:0}
+.rub-name{font-size:12px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rub-ct{font-size:10px;background:rgba(0,0,0,.08);border-radius:10px;padding:2px 7px;flex-shrink:0;font-family:monospace}
+.rub-btn.active .rub-ct{background:rgba(255,255,255,.15);color:rgba(255,255,255,.8)}
+.sb-foot{padding:8px 14px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);font-family:monospace}
+.main-c{flex:1;overflow-y:auto;display:flex;flex-direction:column}
+.main-hdr{padding:20px 24px 14px;border-bottom:1px solid var(--border);display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:10px;flex-shrink:0}
+.main-title{font-family:'Syne',sans-serif;font-size:22px;font-weight:800}
+.main-meta{font-size:12px;color:var(--text3);margin-top:3px;font-family:monospace}
+.main-ctrl{display:flex;align-items:center;gap:8px}
+.sort-sel{padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:'Inter',sans-serif;background:white;outline:none;cursor:pointer}
+.view-tog{display:flex;background:var(--cream2);border-radius:8px;padding:2px;gap:2px}
+.view-btn{background:transparent;border:none;border-radius:6px;padding:5px 8px;cursor:pointer;font-size:14px;color:var(--text3);transition:all .15s}
+.view-btn.on{background:white;box-shadow:var(--shadow)}
+.srch-bar{padding:12px 24px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.srch-wrap{flex:1;display:flex;align-items:center;gap:8px;background:var(--cream2);border-radius:10px;padding:9px 14px}
+.srch-inp{background:transparent;border:none;outline:none;font-size:13px;color:var(--text1);width:100%;font-family:'Inter',sans-serif}
+.scope-btns{display:flex;gap:4px}
+.sc-btn{padding:6px 12px;border:1px solid var(--border);border-radius:8px;font-size:12px;font-family:'Syne',sans-serif;font-weight:600;background:white;color:var(--text2);cursor:pointer;transition:all .15s}
+.sc-btn.on{background:var(--dark);color:white;border-color:var(--dark)}
+.art-cont{flex:1;padding:20px 24px}
+.art-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.acard{background:white;border-radius:12px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);animation:fadeUp .3s ease both}
+.acard:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.c-thumb{height:90px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.c-thumb-book{height:130px;overflow:hidden;position:relative;background:#e8e0d4;display:flex;align-items:center;justify-content:center}
+.c-thumb-book img{width:100%;height:100%;object-fit:cover;object-position:top;transition:transform .3s}
+.acard:hover .c-thumb-book img{transform:scale(1.04)}
+.thumb-ph{font-size:42px;opacity:.35}
+.book-spine{position:absolute;left:0;top:0;bottom:0;width:6px;background:linear-gradient(180deg,rgba(0,0,0,.2),rgba(0,0,0,.05));z-index:1}
+.c-body{padding:12px}
+.c-rub{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;margin-bottom:5px}
+.c-title{font-size:13px;font-weight:600;color:var(--text1);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:8px}
+.c-foot{display:flex;justify-content:space-between;align-items:center}
+.c-size{font-size:11px;color:var(--text3);font-family:monospace}
+.c-open{font-size:11px;color:var(--text2);font-weight:600;opacity:.6}
+.acard:hover .c-open{opacity:1}
+.art-list{display:flex;flex-direction:column;gap:6px}
+.arow{background:white;border-radius:10px;padding:12px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all .15s;box-shadow:var(--shadow);animation:fadeUp .25s ease both}
+.arow:hover{transform:translateX(3px);box-shadow:0 4px 16px rgba(0,0,0,.1)}
+.row-ico{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.row-inf{flex:1;min-width:0}
+.row-title{font-size:13px;font-weight:600;color:var(--text1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-meta{display:flex;gap:12px;margin-top:3px;font-size:11px;color:var(--text3)}
+.row-rub{font-weight:600}
+.row-open{font-size:16px;color:var(--text3);flex-shrink:0}
+.empty-st{text-align:center;padding:60px 20px}
+.empty-ico{font-size:52px;margin-bottom:16px;opacity:.35}
+.empty-t{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--text2);margin-bottom:8px}
+.empty-s{font-size:13px;color:var(--text3);line-height:1.6}
+.loading-st{text-align:center;padding:70px 20px}
+.loading-t{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text2);margin:18px 0 6px}
+.loading-s{font-size:12px;color:var(--text3);font-family:monospace}
+mark{background:#fef08a;border-radius:2px;padding:0 1px}
+.col0{background:linear-gradient(135deg,#dbeafe,#bfdbfe)}.col1{background:linear-gradient(135deg,#d1fae5,#a7f3d0)}.col2{background:linear-gradient(135deg,#fef3c7,#fde68a)}.col3{background:linear-gradient(135deg,#fce7f3,#fbcfe8)}.col4{background:linear-gradient(135deg,#ede9fe,#ddd6fe)}.col5{background:linear-gradient(135deg,#fee2e2,#fecaca)}.col6{background:linear-gradient(135deg,#e0f2fe,#bae6fd)}.col7{background:linear-gradient(135deg,#ecfccb,#d9f99d)}.col8{background:linear-gradient(135deg,#fff7ed,#fed7aa)}.col9{background:linear-gradient(135deg,#f0fdf4,#bbf7d0)}
+.tc0{color:#1d4ed8}.tc1{color:#065f46}.tc2{color:#92400e}.tc3{color:#9d174d}.tc4{color:#5b21b6}.tc5{color:#991b1b}.tc6{color:#075985}.tc7{color:#3f6212}.tc8{color:#9a3412}.tc9{color:#14532d}
+
+/* VIDEO */
+#screen-videos{display:none;flex-direction:column;min-height:calc(100vh - 54px)}
+.vpathbar{padding:10px 24px;background:var(--cream2);border-bottom:1px solid var(--border);font-size:13px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.vp-item{color:var(--text2);cursor:pointer;font-weight:500;transition:color .15s}
+.vp-item:hover{color:var(--text1)}
+.vp-sep{color:var(--text3);margin:0 2px}
+.vp-cur{color:var(--text1);font-weight:600}
+.vcont{padding:24px;flex:1;overflow-y:auto}
+.vsec-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text1);margin-bottom:18px}
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:32px}
+.fcard{background:white;border-radius:14px;padding:22px 20px;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;border:2px solid transparent}
+.fcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12);border-color:var(--border)}
+.fcard-ico{font-size:28px;flex-shrink:0}
+.fcard-name{font-size:14px;font-weight:600;color:var(--text1)}
+.fcard-meta{font-size:11px;color:var(--text3);margin-top:3px}
+.vcard{background:white;border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s;box-shadow:var(--shadow);animation:fadeUp .3s ease both}
+.vcard:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.12)}
+.vthumb{height:110px;background:linear-gradient(135deg,#1a1a2e,#0f3460);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.vthumb img{width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0}
+.vplay{font-size:36px;opacity:.9;position:relative;z-index:1}
+.vbody{padding:12px}
+.vtitle{font-size:13px;font-weight:600;color:var(--text1);line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+.vmeta{font-size:11px;color:var(--text3);font-family:monospace;display:flex;justify-content:space-between}
+.vopen{font-size:11px;color:var(--text2);font-weight:600;opacity:.6}
+.vcard:hover .vopen{opacity:1}
+
+@media(max-width:600px){.sidebar{display:none}.home-cards,.ebook-cards{padding:0 16px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="screen-login">
+  <div class="login-card">
+    <div class="login-logo">&#128218;</div>
+    <h1 class="login-title">Bibliotheque<br>Scientifique</h1>
+    <p class="login-sub">Votre bibliotheque medicale personnelle<br>acces securise via Google</p>
+    <div class="setup-steps">
+      <div class="step"><div class="step-num">&#10003;</div><div>Projet Google Cloud configure</div></div>
+      <div class="step"><div class="step-num">&#10003;</div><div>API Google Drive activee</div></div>
+      <div class="step"><div class="step-num">&#10003;</div><div>Articles EMC · Livres · Videos</div></div>
+    </div>
+    <button class="btn-signin" id="btn-signin">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg>
+      Se connecter avec Google
+    </button>
+    <button class="btn-demo" id="btn-demo">Mode demo sans connexion</button>
+    <div class="err" id="err-msg"></div>
+  </div>
+</div>
+
+<!-- TOPBAR -->
+<div id="topbar" class="hidden">
+  <div class="topbar" style="background:var(--dark)">
+    <div class="topbar-l">
+      <span class="t-logo" id="t-logo">&#128218;</span>
+      <span class="t-title" id="t-title">Bibliotheque Scientifique</span>
+      <div class="t-bc" id="t-bc"></div>
+    </div>
+    <div class="topbar-r">
+      <div class="u-chip">
+        <div class="u-av" id="u-av">?</div>
+        <span class="u-name" id="u-name"></span>
+      </div>
+      <span class="sync-chip hidden" id="sync-chip"><span class="sync-dot"></span><span id="sync-msg">Synchronisation</span></span>
+      <button class="btn-top hidden" id="btn-refresh">&#128260; Actualiser</button>
+      <button class="btn-top" id="btn-signout">Deconnexion</button>
+    </div>
+  </div>
+</div>
+
+<!-- HOME -->
+<div id="screen-home" class="hidden">
+  <div class="home-hero">
+    <h2>Votre bibliotheque medicale</h2>
+    <p>Articles EMC Actualise, livres de reference et videos pedagogiques</p>
+  </div>
+  <div class="home-cards">
+    <div class="hcard blue" id="hcard-articles">
+      <div class="hcard-icon">&#128300;</div>
+      <div class="hcard-title">Articles EMC</div>
+      <div class="hcard-desc">Collection complete d'articles medicaux classes par specialite et sous-rubrique.</div>
+      <div class="hcard-meta" id="meta-articles">Chargement...</div>
+      <div class="hcard-arr">&#8594;</div>
+    </div>
+    <div class="hcard green" id="hcard-ebooks">
+      <div class="hcard-icon">&#128214;</div>
+      <div class="hcard-title">Livres de Radiologie</div>
+      <div class="hcard-desc">Ebooks de reference en francais et en anglais, organises par domaine.</div>
+      <div class="hcard-meta">Francais &middot; Anglais</div>
+      <div class="hcard-arr">&#8594;</div>
+    </div>
+    <div class="hcard purple" id="hcard-videos">
+      <div class="hcard-icon">&#127916;</div>
+      <div class="hcard-title">Videos</div>
+      <div class="hcard-desc">Cours et tutoriels video pour la formation continue en radiologie.</div>
+      <div class="hcard-meta" id="meta-videos">5 collections</div>
+      <div class="hcard-arr">&#8594;</div>
+    </div>
+  </div>
+</div>
+
+<!-- EBOOK SUB HOME -->
+<div id="screen-ebook-home" class="hidden">
+  <div class="ebook-hero">
+    <h2>&#128214; Livres de Radiologie</h2>
+    <p>Choisissez votre collection</p>
+  </div>
+  <div class="ebook-cards">
+    <div class="ecard" id="ecard-fr">
+      <div class="ecard-flag">&#127467;&#127479;</div>
+      <div class="ecard-title">Livres Francais</div>
+      <div class="ecard-desc">Collection de reference en langue francaise</div>
+    </div>
+    <div class="ecard" id="ecard-en">
+      <div class="ecard-flag">&#127468;&#127463;</div>
+      <div class="ecard-title">Livres Anglais</div>
+      <div class="ecard-desc">English reference books collection</div>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSER -->
+<div id="screen-browser" class="hidden">
+  <div class="brow-layout">
+    <div class="sidebar">
+      <div class="sb-search">
+        <div class="sb-wrap">
+          <span style="font-size:13px;opacity:.45">&#128269;</span>
+          <input class="sb-input" id="sb-input" type="text" placeholder="Filtrer les rubriques...">
+        </div>
+      </div>
+      <div class="sb-nav">
+        <div class="nav-lbl">Rubriques</div>
+        <div id="rub-list"></div>
+      </div>
+      <div class="sb-foot" id="sb-foot"></div>
+    </div>
+    <div class="main-c">
+      <div class="main-hdr">
+        <div>
+          <div class="main-title" id="main-title">Chargement...</div>
+          <div class="main-meta" id="main-meta"></div>
+        </div>
+        <div class="main-ctrl">
+          <select class="sort-sel" id="sort-sel">
+            <option value="name">Trier par titre</option>
+            <option value="date">Trier par date</option>
+          </select>
+          <div class="view-tog">
+            <button class="view-btn on" id="vbtn-grid" data-view="grid">&#8862;</button>
+            <button class="view-btn" id="vbtn-list" data-view="list">&#9776;</button>
+          </div>
+        </div>
+      </div>
+      <div class="srch-bar">
+        <div class="srch-wrap">
+          <span style="font-size:14px;opacity:.4">&#128269;</span>
+          <input class="srch-inp" id="srch-inp" type="text" placeholder="Rechercher...">
+        </div>
+        <div class="scope-btns">
+          <button class="sc-btn on" id="sc-title" data-scope="title">Titre</button>
+          <button class="sc-btn" id="sc-content" data-scope="content">Contenu Drive</button>
+        </div>
+      </div>
+      <div class="art-cont" id="art-cont">
+        <div class="loading-st"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- VIDEOS -->
+<div id="screen-videos" class="hidden">
+  <div class="vpathbar" id="vpathbar">&#127916; Videos</div>
+  <div class="vcont" id="vcont">
+    <div class="loading-st"><div class="spinner"></div></div>
+  </div>
+</div>
+
+<script src="https://apis.google.com/js/api.js"></script>
+<script src="https://accounts.google.com/gsi/client"></script>
+<script>
+// CONFIG
+var CFG = {
+  clientId:  '987134291696-6bivjhh8phljh7vtle4124bf6lvetg1m.apps.googleusercontent.com',
+  folderEMC: '1TnoLPSIz9bb6UbBGi6RlW0yz3FOj8-h-',
+  folderFR:  '1BHFNoJ7av3gZnqv25PI6RzXo8uOhxY8f',
+  folderEN:  '1UxPtRvXtXkpmt5j-TUp75H2WgJ7oNIPj',
+  videoFolders: [
+    '1pajPHzDkuLDqIfFFT9C-gOrgd-bZxrtL',
+    '1rF_k6JpCx-GDWXIHbULOZk7hGjopU9u6',
+    '11-ShbQB_xh-iGdW68VcAFP2EGBaZ3BSY',
+    '1D5ckEGVWzskxXBk1gb115NrISNI4NWTQ',
+    '10xFATIRNwmDgOFlzZMYAO6ebFG_OvRFI'
+  ],
+  scopes:   'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file',
+  discDoc:  'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
+  cacheTTL: 24 * 3600 * 1000,
+  // Admin (seul a pouvoir ecrire le cache sur Drive)
+  adminEmail: 'a.elfarouki@gmail.com',
+  // Un fichier JSON par section dans le dossier Drive correspondant
+  cacheMap: {
+    'articles': { folderKey: 'folderEMC', fileName: 'cache-articles.json' },
+    'ebook-fr': { folderKey: 'folderFR',  fileName: 'cache-ebook-fr.json' },
+    'ebook-en': { folderKey: 'folderEN',  fileName: 'cache-ebook-en.json' }
+  },
+  icons:    ['\u{1F9EC}','\u{1F52C}','\u{1F9EA}','\u{1FAC0}','\u{1F9E0}',
+             '\u{1F48A}','\u{1FA7A}','\u{1F4CA}','\u{1F52D}','\u{1F321}\uFE0F',
+             '\u{1F9A0}','\u{1F9EB}','\u{1FA7B}','\u{1F489}','\u{1F9F2}']
+};
+
+// STATE
+var S = {
+  tokenClient: null,
+  isDemo: false,
+  section: '',
+  isBook: false,
+  rubMap: {}, allItems: [], colorCnt: 0,
+  curRub: 'all', curSearch: '', curScope: 'title', curView: 'grid',
+  loadSess: 0,
+  vidSess: 0,
+  vidPath: [],
+  userEmail: '',
+  cacheTs: 0,
+  cacheFileIds: {} // section -> Drive fileId du cache (evite relookup)
+};
+
+// DATA REGISTRY (for video clicks - avoids inline onclick with complex data)
+var REG = {};
+var REG_IDX = 0;
+function regSet(data) {
+  var k = 'r' + (++REG_IDX);
+  REG[k] = data;
+  return k;
+}
+function regGet(k) { return REG[k] || null; }
+
+// RECENTS
+var MAX_REC = 20;
+function rKey(sec) { return 'bib4_rec_' + sec; }
+function addRecent(sec, item) {
+  try {
+    var lst = JSON.parse(localStorage.getItem(rKey(sec)) || '[]');
+    lst = lst.filter(function(r) { return r.id !== item.id; });
+    lst.unshift({ id:item.id, name:item.name, size:item.size||'',
+      date:item.date||'', rubrique:item.rubrique||'', colorIdx:item.colorIdx||0,
+      link:item.link||'', thumb:item.thumb||null, isDemo:item.isDemo||false,
+      sousRub:item.sousRub||'', rubKey:item.rubKey||'', ts:Date.now() });
+    localStorage.setItem(rKey(sec), JSON.stringify(lst.slice(0, MAX_REC)));
+  } catch(e) {}
+}
+function addRecentVid(v, link) {
+  try {
+    var lst = JSON.parse(localStorage.getItem(rKey('videos')) || '[]');
+    lst = lst.filter(function(r) { return r.id !== v.id; });
+    lst.unshift({ id:v.id, name:(v.name||'').replace(/\.[^.]+$/,''),
+      size:v.size ? fmtSize(parseInt(v.size)) : '',
+      link:link, thumb:v.thumbnailLink||null, ts:Date.now() });
+    localStorage.setItem(rKey('videos'), JSON.stringify(lst.slice(0, MAX_REC)));
+  } catch(e) {}
+}
+function getRecents(sec) {
+  try { return JSON.parse(localStorage.getItem(rKey(sec)) || '[]'); } catch(e) { return []; }
+}
+function timeAgo(ts) {
+  var m = Math.floor((Date.now() - ts) / 60000);
+  if (m < 1) return 'A l\u0027instant';
+  if (m < 60) return m + ' min';
+  var h = Math.floor(m / 60);
+  if (h < 24) return h + 'h';
+  return Math.floor(h / 24) + 'j';
+}
+function clearRecents() {
+  try { localStorage.removeItem(rKey(S.section)); } catch(e) {}
+  S.curRub = 'all'; renderSidebar(); renderItems();
+}
+
+// DOM HELPERS
+function el(id) { return document.getElementById(id); }
+function show(id) { var e = el(id); if (e) { e.classList.remove('hidden'); if (e.style.display === 'none') e.style.display = 'flex'; } }
+function hide(id) { var e = el(id); if (e) { e.classList.add('hidden'); e.style.display = ''; } }
+function txt(id, v) { var e = el(id); if (e) e.textContent = v; }
+function htm(id, v) { var e = el(id); if (e) e.innerHTML = v; }
+function showOnly(id) {
+  ['screen-login','screen-home','screen-ebook-home','screen-browser','screen-videos'].forEach(hide);
+  show(id);
+  if (id === 'screen-browser') { var e = el(id); if (e) e.style.display = 'flex'; }
+  if (id === 'screen-videos')  { var e2 = el(id); if (e2) e2.style.display = 'flex'; }
+}
+function esc(s) {
+  if (!s) return '';
+  var o = '', i, c;
+  for (i = 0; i < s.length; i++) {
+    c = s.charAt(i);
+    if (c === '&') o += '&amp;';
+    else if (c === '<') o += '&lt;';
+    else if (c === '>') o += '&gt;';
+    else if (c === '"') o += '&quot;';
+    else o += c;
+  }
+  return o;
+}
+function fmtSize(b) {
+  if (b > 1048576) return (b / 1048576).toFixed(1) + ' Mo';
+  if (b > 1024) return (b / 1024).toFixed(0) + ' Ko';
+  return b + ' o';
+}
+function setLoading(t, s) {
+  htm('art-cont', '<div class="loading-st"><div class="spinner"></div>' +
+    '<div class="loading-t">' + esc(t) + '</div>' +
+    '<div class="loading-s">' + esc(s || '') + '</div></div>');
+}
+
+// SESSION
+var SESS_KEY = 'bib_sess';
+function saveSession(token, user) {
+  try { localStorage.setItem(SESS_KEY, JSON.stringify({ token: token, user: user, ts: Date.now() })); } catch(e) {}
+}
+function clearSession() {
+  try { localStorage.removeItem(SESS_KEY); } catch(e) {}
+}
+function loadSession() {
+  try {
+    var d = JSON.parse(localStorage.getItem(SESS_KEY) || 'null');
+    if (!d || !d.token || (Date.now() - d.ts) > 55 * 60 * 1000) return null;
+    return d;
+  } catch(e) { return null; }
+}
+
+// AUTH
+function initAuth() {
+  var btn = el('btn-signin');
+  btn.disabled = true;
+  btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle"></div> Connexion...';
+  var errEl = el('err-msg');
+  if (errEl) errEl.style.display = 'none';
+
+  if (typeof gapi === 'undefined') { showErr('gapi non charge - verifiez votre connexion'); resetBtn(); return; }
+  if (typeof google === 'undefined' || !google.accounts) { showErr('google.accounts non charge'); resetBtn(); return; }
+
+  gapi.load('client', function() {
+    gapi.client.init({ discoveryDocs: [CFG.discDoc] })
+    .then(function() {
+      S.tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CFG.clientId,
+        scope: CFG.scopes,
+        callback: function(resp) {
+          if (resp.error) { showErr('OAuth: ' + resp.error); resetBtn(); return; }
+          onSignedIn();
+        },
+        error_callback: function(err) {
+          showErr('Popup bloque: ' + (err.message || JSON.stringify(err)));
+          resetBtn();
+        }
+      });
+      S.tokenClient.requestAccessToken({ prompt: 'select_account' });
+    })
+    .catch(function(e) { showErr('Init: ' + (e.message || JSON.stringify(e))); resetBtn(); });
+  });
+}
+
+function resetBtn() {
+  var btn = el('btn-signin'); if (!btn) return;
+  btn.disabled = false;
+  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z" fill="#4285F4"/><path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/><path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332z" fill="#FBBC05"/><path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/></svg> Se connecter avec Google';
+}
+
+function showErr(m) { var e = el('err-msg'); if (e) { e.textContent = m; e.style.display = 'block'; } }
+
+function onSignedIn() {
+  gapi.client.request({ path: 'https://www.googleapis.com/oauth2/v2/userinfo' })
+  .then(function(r) {
+    var u = r.result || {};
+    S.userEmail = (u.email || '').toLowerCase();
+    txt('u-name', u.name || u.email || 'Connecte');
+    if (u.picture) htm('u-av', '<img src="' + u.picture + '">');
+    else txt('u-av', (u.name || 'U').charAt(0).toUpperCase());
+    saveSession(gapi.client.getToken(), u);
+  })
+  .catch(function() { txt('u-name', 'Connecte'); });
+  show('topbar');
+  goHome();
+  preloadMeta();
+}
+
+function signOut() {
+  clearSession();
+  try { var t = gapi.client.getToken(); if (t) google.accounts.oauth2.revoke(t.access_token, function(){}); gapi.client.setToken(null); } catch(e) {}
+  location.reload();
+}
+
+function loadDemo() {
+  S.isDemo = true;
+  S.userEmail = '';
+  var cats = [
+    { r: 'Cardiologie', a: ['Insuffisance cardiaque', 'Fibrillation auriculaire'] },
+    { r: 'Neurologie',  a: ['AVC ischemique', 'Epilepsie'] },
+    { r: 'Pneumologie', a: ['BPCO', 'Pneumonie'] },
+    { r: 'Radiologie',  a: ['TDM thoracique', 'IRM cerebrale'] }
+  ];
+  S.rubMap = {}; S.allItems = []; S.section = 'articles'; S.isBook = false;
+  cats.forEach(function(c, i) {
+    var arts = c.a.map(function(n, j) {
+      return { id: 'd' + i + j, name: n, size: '1.5 Mo', date: '2024-01-01',
+        rubrique: c.r, sousRub: '', rubKey: 'rd' + i, colorIdx: i % 10,
+        link: '#', thumb: null, isDemo: true };
+    });
+    S.rubMap['rd' + i] = { name: c.r, colorIdx: i % 10, icon: CFG.icons[i], articles: arts };
+    S.allItems = S.allItems.concat(arts);
+  });
+  txt('u-name', 'Demo'); txt('u-av', 'D');
+  show('topbar'); goHome();
+  txt('meta-articles', S.allItems.length + ' articles (demo)');
+}
+
+// NAVIGATION
+function goHome() {
+  showOnly('screen-home');
+  setBreadcrumb([]);
+  hide('btn-refresh');
+}
+
+function setBreadcrumb(parts, actions) {
+  actions = actions || [];
+  var h = '';
+  if (parts.length > 0) {
+    h = '<span class="bc-sep">&rsaquo;</span>';
+    parts.forEach(function(p, i) {
+      if (i < parts.length - 1) {
+        if (actions[i]) {
+          h += '<span class="bc-link" data-bcaction="' + i + '">' + esc(p) + '</span>';
+        } else {
+          h += '<span>' + esc(p) + '</span>';
+        }
+        h += '<span class="bc-sep">&rsaquo;</span>';
+      } else {
+        h += '<span class="bc-cur">' + esc(p) + '</span>';
+      }
+    });
+  }
+  htm('t-bc', h);
+  // Store actions for click handler
+  el('t-bc').dataset.actions = JSON.stringify(actions);
+}
+
+// Breadcrumb click delegation
+document.addEventListener('DOMContentLoaded', function() {
+  // Topbar logo/title
+  el('t-logo').addEventListener('click', goHome);
+  el('t-title').addEventListener('click', goHome);
+  el('btn-signout').addEventListener('click', signOut);
+  el('btn-refresh').addEventListener('click', doRefresh);
+  el('btn-signin').addEventListener('click', initAuth);
+  el('btn-demo').addEventListener('click', loadDemo);
+
+  // Home cards
+  el('hcard-articles').addEventListener('click', function() { openBrowser('articles', 'Articles EMC', CFG.folderEMC); });
+  el('hcard-ebooks').addEventListener('click', function() {
+    showOnly('screen-ebook-home');
+    setBreadcrumb(['Livres de Radiologie']);
+    hide('btn-refresh');
+  });
+  el('hcard-videos').addEventListener('click', function() { openVideos(); });
+
+  // Ebook cards
+  el('ecard-fr').addEventListener('click', function() { openBrowser('ebook-fr', 'Livres FR', CFG.folderFR); });
+  el('ecard-en').addEventListener('click', function() { openBrowser('ebook-en', 'Livres EN', CFG.folderEN); });
+
+  // Breadcrumb delegation
+  el('t-bc').addEventListener('click', function(e) {
+    var t = e.target;
+    if (!t.classList.contains('bc-link')) return;
+    var idx = parseInt(t.dataset.bcaction);
+    var actions = JSON.parse(el('t-bc').dataset.actions || '[]');
+    if (actions[idx]) { var fn = actions[idx]; fn(); }
+  });
+
+  // Sidebar search
+  el('sb-input').addEventListener('input', function() { renderSidebar(this.value); });
+
+  // Sort
+  el('sort-sel').addEventListener('change', function() { renderItems(); });
+
+  // View toggle
+  el('vbtn-grid').addEventListener('click', function() { setView('grid'); });
+  el('vbtn-list').addEventListener('click', function() { setView('list'); });
+
+  // Scope
+  el('sc-title').addEventListener('click', function() { setScope('title'); });
+  el('sc-content').addEventListener('click', function() { setScope('content'); });
+
+  // Search
+  var stimer;
+  el('srch-inp').addEventListener('input', function() {
+    var v = this.value;
+    clearTimeout(stimer);
+    stimer = setTimeout(function() { onSearch(v); }, 300);
+  });
+
+  // Video container delegation (for folder and video clicks)
+  el('vcont').addEventListener('click', function(e) {
+    var t = e.target;
+    // Walk up to find a card with data-regkey
+    while (t && t !== this) {
+      if (t.dataset && t.dataset.regkey) {
+        var d = regGet(t.dataset.regkey);
+        if (d) {
+          if (d.type === 'folder') openVideoLevel(d.id, d.path);
+          else if (d.type === 'video') {
+            if (d.vdata) addRecentVid(d.vdata, d.link);
+            window.open(d.link, '_blank');
+          }
+        }
+        return;
+      }
+      t = t.parentElement;
+    }
+  });
+
+  // Pathbar delegation
+  el('vpathbar').addEventListener('click', function(e) {
+    var t = e.target;
+    while (t && t !== this) {
+      if (t.dataset && t.dataset.regkey) {
+        var d = regGet(t.dataset.regkey);
+        if (d) openVideoLevel(d.id, d.path);
+        return;
+      }
+      if (t.dataset && t.dataset.vrecents) {
+        htm('vpathbar', '<span class="vp-item" data-vroot="1">\u{1F3AC} Videos</span><span class="vp-sep">&rsaquo;</span><span class="vp-cur">R\u00e9cents</span>');
+        setBreadcrumb(['Videos','R\u00e9cents'],[function(){openVideoLevel(null,[]);}]);
+        renderVideoRecents(); return;
+      }
+      if (t.dataset && t.dataset.vroot) { openVideoLevel(null, []); return; }
+      t = t.parentElement;
+    }
+  });
+
+  // Auto-restore session
+  autoLogin();
+});
+
+function autoLogin() {
+  var saved = loadSession();
+  if (!saved) return;
+  var check = setInterval(function() {
+    if (typeof gapi === 'undefined' || typeof google === 'undefined') return;
+    clearInterval(check);
+    gapi.load('client', function() {
+      gapi.client.init({ discoveryDocs: [CFG.discDoc] }).then(function() {
+        gapi.client.setToken(saved.token);
+        if (saved.user) {
+          S.userEmail = (saved.user.email || '').toLowerCase();
+          txt('u-name', saved.user.name || saved.user.email || 'Connecte');
+          if (saved.user.picture) htm('u-av', '<img src="' + saved.user.picture + '">');
+          else txt('u-av', ((saved.user.name || 'U').charAt(0)).toUpperCase());
+        }
+        show('topbar');
+        goHome();
+        preloadMeta();
+      }).catch(clearSession);
+    });
+  }, 150);
+}
+
+// BROWSER
+function openBrowser(sectionId, label, folderId) {
+  S.section = sectionId;
+  S.isBook = sectionId !== 'articles';
+  S.rubMap = {}; S.allItems = []; S.colorCnt = 0;
+  S.curRub = 'all'; S.curSearch = '';
+  var inp = el('srch-inp'); if (inp) inp.value = '';
+  var sinp = el('sb-input'); if (sinp) sinp.value = '';
+
+  showOnly('screen-browser');
+  if (S.isBook) {
+    setBreadcrumb(['Livres de Radiologie', label], [function() {
+      showOnly('screen-ebook-home');
+      setBreadcrumb(['Livres de Radiologie']);
+      hide('btn-refresh');
+    }]);
+  } else {
+    setBreadcrumb([label]);
+  }
+  if (isAdmin()) show('btn-refresh'); else hide('btn-refresh');
+  txt('main-title', label);
+  txt('main-meta', '');
+  htm('rub-list', '');
+  txt('sb-foot', '');
+  setLoading('Exploration des dossiers...', '');
+  doLoadBrowser(folderId, false);
+}
+
+// ===== CACHE PARTAGE SUR GOOGLE DRIVE =====
+function isAdmin() {
+  return !!(S.userEmail && S.userEmail === CFG.adminEmail.toLowerCase());
+}
+
+// Trouver (ou non) le fichier de cache dans son dossier Drive
+async function findCacheFile(section) {
+  var m = CFG.cacheMap[section]; if (!m) return null;
+  var folderId = CFG[m.folderKey]; if (!folderId) return null;
+  try {
+    var r = await gapi.client.drive.files.list({
+      q: "'" + folderId + "' in parents and name='" + m.fileName + "' and trashed=false",
+      fields: 'files(id,name,modifiedTime,size)',
+      pageSize: 1
+    });
+    var f = r.result.files && r.result.files[0];
+    if (f) S.cacheFileIds[section] = f.id;
+    return f || null;
+  } catch(e) { return null; }
+}
+
+// Lire le contenu JSON du fichier de cache
+async function readCacheFromDrive(section) {
+  var f = await findCacheFile(section);
+  if (!f) return null;
+  try {
+    var token = gapi.client.getToken();
+    var r = await fetch('https://www.googleapis.com/drive/v3/files/' + f.id + '?alt=media', {
+      headers: { 'Authorization': 'Bearer ' + token.access_token }
+    });
+    if (!r.ok) return null;
+    var data = await r.json();
+    return {
+      map: data.map || {},
+      updated_at: f.modifiedTime,
+      item_count: data.item_count || 0,
+      updated_by: data.updated_by || ''
+    };
+  } catch(e) { return null; }
+}
+
+// Ecrire (creer ou mettre a jour) le fichier de cache (admin uniquement)
+async function writeCacheToDrive(section, map, itemCount) {
+  if (!isAdmin()) return false;
+  var m = CFG.cacheMap[section]; if (!m) return false;
+  var folderId = CFG[m.folderKey]; if (!folderId) return false;
+  var payload = {
+    map: map,
+    item_count: itemCount,
+    updated_at: new Date().toISOString(),
+    updated_by: CFG.adminEmail,
+    version: 1
+  };
+  var body = JSON.stringify(payload);
+
+  try {
+    var fileId = S.cacheFileIds[section];
+    if (!fileId) {
+      var existing = await findCacheFile(section);
+      if (existing) fileId = existing.id;
+    }
+
+    if (fileId) {
+      // PATCH content uniquement (uploadType=media)
+      var r = await gapi.client.request({
+        path: '/upload/drive/v3/files/' + fileId,
+        method: 'PATCH',
+        params: { uploadType: 'media' },
+        headers: { 'Content-Type': 'application/json' },
+        body: body
+      });
+      return !!(r && (r.status === 200 || r.status === 204 || r.result));
+    } else {
+      // POST multipart pour creer le fichier avec metadata + content
+      var boundary = '-----bib-cache-' + Date.now();
+      var delimiter = '\r\n--' + boundary + '\r\n';
+      var closeDelim = '\r\n--' + boundary + '--';
+      var metadata = { name: m.fileName, parents: [folderId], mimeType: 'application/json' };
+      var multipart =
+        delimiter + 'Content-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) +
+        delimiter + 'Content-Type: application/json; charset=UTF-8\r\n\r\n' + body +
+        closeDelim;
+      var r2 = await gapi.client.request({
+        path: '/upload/drive/v3/files',
+        method: 'POST',
+        params: { uploadType: 'multipart' },
+        headers: { 'Content-Type': 'multipart/related; boundary="' + boundary + '"' },
+        body: multipart
+      });
+      if (r2 && r2.result && r2.result.id) {
+        S.cacheFileIds[section] = r2.result.id;
+        return true;
+      }
+      return false;
+    }
+  } catch(e) { return false; }
+}
+
+function ageString(ts) {
+  var d = Date.now() - ts;
+  if (d < 60000) return 'a l\'instant';
+  var m = Math.floor(d / 60000);
+  if (m < 60) return 'il y a ' + m + ' min';
+  var h = Math.floor(m / 60);
+  if (h < 24) return 'il y a ' + h + 'h';
+  var j = Math.floor(h / 24);
+  return 'il y a ' + j + 'j';
+}
+
+function showSync(msg, done) {
+  var chip = el('sync-chip'), mEl = el('sync-msg');
+  if (!chip || !mEl) return;
+  mEl.textContent = msg;
+  chip.classList.remove('hidden');
+  if (done) chip.classList.add('done'); else chip.classList.remove('done');
+}
+function hideSync() {
+  var chip = el('sync-chip'); if (chip) chip.classList.add('hidden');
+}
+function fadeSync(msg, delay) {
+  showSync(msg, true);
+  setTimeout(hideSync, delay || 2500);
+}
+
+function applyMap(map) {
+  S.rubMap = map;
+  S.allItems = [];
+  Object.keys(S.rubMap).forEach(function(k) {
+    if (S.rubMap[k] && S.rubMap[k].articles) S.allItems = S.allItems.concat(S.rubMap[k].articles);
+  });
+}
+
+function doRefresh() {
+  var btn = el('btn-refresh');
+  if (S.section === 'videos') {
+    openVideoLevel(null, []);
+    return;
+  }
+  if (!isAdmin()) {
+    // Non-admin : relire simplement le cache Drive
+    btn.textContent = '...'; btn.disabled = true;
+    var fmapR = { 'articles': CFG.folderEMC, 'ebook-fr': CFG.folderFR, 'ebook-en': CFG.folderEN };
+    doLoadBrowser(fmapR[S.section], false).then(function() {
+      btn.textContent = '\u{1F504} Actualiser'; btn.disabled = false;
+    });
+    return;
+  }
+  btn.textContent = '...'; btn.disabled = true;
+  var fmap = { 'articles': CFG.folderEMC, 'ebook-fr': CFG.folderFR, 'ebook-en': CFG.folderEN };
+  S.rubMap = {}; S.allItems = []; S.colorCnt = 0; S.curRub = 'all';
+  htm('rub-list', ''); setLoading('Reindexation complete...', '');
+  doLoadBrowser(fmap[S.section], true).then(function() {
+    btn.textContent = '\u{1F504} Actualiser'; btn.disabled = false;
+  });
+}
+
+async function doLoadBrowser(folderId, force) {
+  S.loadSess++;
+  var mySess = S.loadSess, mySect = S.section;
+  S.rubMap = {}; S.allItems = []; S.colorCnt = 0;
+  htm('rub-list', '');
+
+  // 1) Sans force : on tente d'abord le cache Drive (rapide)
+  if (!force) {
+    showSync('Lecture du cache...');
+    var cached = await readCacheFromDrive(mySect);
+    if (S.loadSess !== mySess || S.section !== mySect) { hideSync(); return; }
+    if (cached && cached.map && Object.keys(cached.map).length > 0) {
+      applyMap(cached.map);
+      S.cacheTs = new Date(cached.updated_at).getTime();
+      txt('sb-foot', S.allItems.length + ' elements \u00b7 MAJ ' + ageString(S.cacheTs));
+      renderSidebar(); renderItems();
+      if (S.section === 'articles') txt('meta-articles', S.allItems.length + ' articles');
+      hideSync();
+
+      // 2) Refresh silencieux en arriere-plan si admin et cache > TTL
+      var stale = (Date.now() - S.cacheTs) > CFG.cacheTTL;
+      if (stale && isAdmin() && !S.isDemo) {
+        backgroundRefresh(folderId, mySess, mySect);
+      }
+      return;
+    }
+    hideSync();
+  }
+
+  // 3) Pas de cache ou force : scan Drive complet
+  if (!isAdmin() && !force) {
+    htm('art-cont', '<div class="empty-st"><div class="empty-ico">\u{1F4E1}</div><div class="empty-t">Cache indisponible</div><div class="empty-s">Le fichier de cache Drive est absent.<br>L\'administrateur doit l\'initialiser une premiere fois.</div></div>');
+    return;
+  }
+
+  setLoading('Exploration des dossiers...', '');
+  try {
+    var localMap = {};
+    await scanFolder(folderId, [], localMap, { cnt: 0 }, mySess, mySect);
+    if (S.loadSess !== mySess || S.section !== mySect) return;
+    applyMap(localMap);
+    S.cacheTs = Date.now();
+
+    if (isAdmin()) {
+      showSync('Sauvegarde sur Drive...');
+      var ok = await writeCacheToDrive(mySect, S.rubMap, S.allItems.length);
+      if (S.loadSess === mySess && S.section === mySect) {
+        if (ok) fadeSync('\u2713 Cache Drive mis a jour', 3000);
+        else fadeSync('\u26a0 Echec sauvegarde Drive', 3500);
+      }
+    }
+
+    txt('sb-foot', S.allItems.length + ' elements \u00b7 MAJ a l\'instant');
+    renderSidebar(); renderItems();
+    if (S.section === 'articles') txt('meta-articles', S.allItems.length + ' articles');
+  } catch(e) {
+    if (S.loadSess !== mySess || S.section !== mySect) return;
+    hideSync();
+    htm('art-cont', '<div class="empty-st"><div class="empty-ico">!</div><div class="empty-t">Erreur</div><div class="empty-s">' + esc(e.message || String(e)) + '</div></div>');
+  }
+}
+
+async function backgroundRefresh(folderId, mySess, mySect) {
+  showSync('Mise a jour en arriere-plan...');
+  try {
+    var localMap = {};
+    await scanFolder(folderId, [], localMap, { cnt: 0 }, mySess, mySect);
+    if (S.loadSess !== mySess || S.section !== mySect) { hideSync(); return; }
+
+    var oldCount = S.allItems.length;
+    applyMap(localMap);
+    var newCount = S.allItems.length;
+    var diff = newCount - oldCount;
+
+    var ok = await writeCacheToDrive(mySect, S.rubMap, newCount);
+    if (S.loadSess !== mySess || S.section !== mySect) { hideSync(); return; }
+    S.cacheTs = Date.now();
+
+    txt('sb-foot', newCount + ' elements \u00b7 MAJ a l\'instant');
+    renderSidebar(); renderItems();
+    if (S.section === 'articles') txt('meta-articles', newCount + ' articles');
+
+    var msg;
+    if (!ok) msg = '\u26a0 Sauvegarde echouee';
+    else if (diff === 0) msg = '\u2713 Deja a jour';
+    else if (diff > 0) msg = '\u2713 ' + diff + ' nouveau' + (diff > 1 ? 'x' : '');
+    else msg = '\u2713 ' + Math.abs(diff) + ' retire' + (Math.abs(diff) > 1 ? 's' : '');
+    fadeSync(msg, 3500);
+  } catch(e) {
+    hideSync();
+  }
+}
+
+async function scanFolder(fid, path, lmap, counter, sess, sect) {
+  if (S.loadSess !== sess || S.section !== sect) return;
+  var pt = null, pdfs = [];
+  do {
+    var p = { q: "'" + fid + "' in parents and mimeType='application/pdf' and trashed=false",
+      fields: 'nextPageToken,files(id,name,size,modifiedTime,webViewLink,thumbnailLink)',
+      orderBy: 'name', pageSize: 1000 };
+    if (pt) p.pageToken = pt;
+    var r = await gapi.client.drive.files.list(p);
+    pdfs = pdfs.concat(r.result.files || []);
+    pt = r.result.nextPageToken || null;
+  } while (pt);
+
+  if (pdfs.length > 0 && path.length > 0) {
+    var key = path[0], sous = path.length > 1 ? path.slice(1).join(' > ') : '';
+    if (!lmap[key]) {
+      lmap[key] = { name: path[0], colorIdx: counter.cnt % 10, icon: CFG.icons[counter.cnt % CFG.icons.length], articles: [] };
+      counter.cnt++;
+    }
+    pdfs.forEach(function(f) {
+      lmap[key].articles.push({
+        id: f.id, name: f.name.replace(/\.pdf$/i, ''), size: f.size ? fmtSize(parseInt(f.size)) : '-',
+        date: f.modifiedTime ? f.modifiedTime.slice(0, 10) : '',
+        rubrique: path[0], sousRub: sous, rubKey: key,
+        colorIdx: lmap[key].colorIdx,
+        link: f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view'),
+        thumb: f.thumbnailLink ? f.thumbnailLink.replace('=s220', '=s400') : null,
+        isDemo: false
+      });
+    });
+  }
+  var sr = await gapi.client.drive.files.list({
+    q: "'" + fid + "' in parents and mimeType='application/vnd.google-apps.folder' and trashed=false",
+    fields: 'files(id,name)', orderBy: 'name', pageSize: 200
+  });
+  var subs = sr.result.files || [];
+  for (var j = 0; j < subs.length; j++) {
+    if (S.loadSess !== sess || S.section !== sect) return;
+    setLoading('Exploration...', path.concat([subs[j].name]).join(' > '));
+    await scanFolder(subs[j].id, path.concat([subs[j].name]), lmap, counter, sess, sect);
+  }
+}
+
+async function preloadMeta() {
+  try {
+    var cached = await readCacheFromDrive('articles');
+    if (cached && cached.item_count) {
+      txt('meta-articles', cached.item_count + ' articles');
+    }
+  } catch(e) {}
+}
+
+// SIDEBAR
+function renderSidebar(filter) {
+  filter = filter || '';
+  var lbl = S.isBook ? 'Tous les livres' : 'Tous les articles';
+  var total = S.allItems.length;
+  var recCnt = getRecents(S.section).length;
+  var h = '<button class="rub-btn' + (S.curRub === '__rec__' ? ' active' : '') + '" data-rub="__rec__">' +
+    '<span class="rub-icon">\u{1F552}</span>' +
+    '<span class="rub-name">R\u00e9cents</span>' +
+    '<span class="rub-ct">' + recCnt + '</span></button>';
+  h += '<button class="rub-btn' + (S.curRub === 'all' ? ' active' : '') + '" data-rub="all">' +
+    '<span class="rub-icon">' + (S.isBook ? '\u{1F4D6}' : '\u{1F4DA}') + '</span>' +
+    '<span class="rub-name">' + lbl + '</span>' +
+    '<span class="rub-ct">' + total + '</span></button>';
+  Object.keys(S.rubMap).forEach(function(k) {
+    var rub = S.rubMap[k];
+    if (filter && rub.name.toLowerCase().indexOf(filter.toLowerCase()) === -1) return;
+    h += '<button class="rub-btn' + (S.curRub === k ? ' active' : '') + '" data-rub="' + esc(k) + '">' +
+      '<span class="rub-icon">' + rub.icon + '</span>' +
+      '<span class="rub-name">' + esc(rub.name) + '</span>' +
+      '<span class="rub-ct">' + rub.articles.length + '</span></button>';
+  });
+  htm('rub-list', h);
+  // Event delegation for rub buttons
+  el('rub-list').onclick = function(e) {
+    var t = e.target;
+    while (t && t !== this) {
+      if (t.dataset && t.dataset.rub !== undefined) {
+        S.curRub = t.dataset.rub;
+        S.curSearch = ''; var inp = el('srch-inp'); if (inp) inp.value = '';
+        renderSidebar(); renderItems(); return;
+      }
+      t = t.parentElement;
+    }
+  };
+}
+
+// ITEMS RENDER
+function getFiltered() {
+  var items;
+  if (S.curRub === '__rec__') {
+    items = getRecents(S.section);
+  } else {
+    items = S.curRub === 'all' ? S.allItems : (S.rubMap[S.curRub] ? S.rubMap[S.curRub].articles : []);
+  }
+  if (S.curSearch) {
+    var q = S.curSearch.toLowerCase();
+    items = items.filter(function(a) { return a.name.toLowerCase().indexOf(q) !== -1 || a.rubrique.toLowerCase().indexOf(q) !== -1; });
+  }
+  var s = el('sort-sel') ? el('sort-sel').value : 'name';
+  return items.slice().sort(function(a, b) {
+    return s === 'date' ? (b.date || '').localeCompare(a.date || '') : a.name.localeCompare(b.name);
+  });
+}
+
+function hlText(t, q) {
+  if (!q) return esc(t);
+  return esc(t).replace(new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + ')', 'gi'), '<mark>$1</mark>');
+}
+
+function thumbHtml(a) {
+  if (!S.isBook) return '<div class="c-thumb col' + a.colorIdx + '"><span style="opacity:.7">' + CFG.icons[a.colorIdx] + '</span></div>';
+  return '<div class="c-thumb-book"><div class="book-spine"></div>' +
+    (a.thumb ? '<img src="' + esc(a.thumb) + '" onerror="this.style.display=\'none\'">' : '') +
+    '<span class="thumb-ph" ' + (a.thumb ? 'style="display:none"' : '') + '>\u{1F4D6}</span></div>';
+}
+
+function renderItems() {
+  var items = getFiltered();
+  var rname = S.curRub === 'all' ? (S.isBook ? 'Tous les livres' : 'Tous les articles') : (S.rubMap[S.curRub] ? S.rubMap[S.curRub].name : '');
+  txt('main-title', rname);
+  var lbl = S.isBook ? 'livre' : 'article';
+  txt('main-meta', items.length + ' ' + lbl + (items.length !== 1 ? 's' : '') + ' - ' + Object.keys(S.rubMap).length + ' rubriques');
+  if (!items.length) {
+    if (S.curRub === '__rec__') {
+      htm('art-cont', '<div class="empty-st"><div class="empty-ico">\u{1F552}</div><div class="empty-t">Aucune consultation</div><div class="empty-s">Vos derniers \u00e9l\u00e9ments ouverts appara\u00eetront ici.</div></div>');
+    } else {
+      htm('art-cont', '<div class="empty-st"><div class="empty-ico">\u{1F50D}</div><div class="empty-t">Aucun element</div><div class="empty-s">Essayez un autre terme.</div></div>');
+    }
+    return;
+  }
+  var q = S.curSearch, openLbl = S.isBook ? 'Lire &rarr;' : 'Ouvrir &rarr;';
+  var h = '';
+  if (S.curView === 'grid') {
+    h = '<div class="art-grid">';
+    items.forEach(function(a, i) {
+      var k = regSet({ type: 'article', link: a.link, isDemo: a.isDemo, item: a });
+      h += '<div class="acard" style="animation-delay:' + Math.min(i * 20, 300) + 'ms" data-regkey="' + k + '">' +
+        thumbHtml(a) +
+        '<div class="c-body">' +
+        '<div class="c-rub tc' + a.colorIdx + '">' + esc(a.rubrique) + (a.sousRub ? ' &rsaquo; ' + esc(a.sousRub) : '') + '</div>' +
+        '<div class="c-title">' + hlText(a.name, q) + '</div>' +
+        '<div class="c-foot"><span class="c-size">' + a.size + '</span><span class="c-open">' + openLbl + '</span></div>' +
+        '</div></div>';
+    });
+    h += '</div>';
+  } else {
+    h = '<div class="art-list">';
+    items.forEach(function(a, i) {
+      var k = regSet({ type: 'article', link: a.link, isDemo: a.isDemo, item: a });
+      var rmeta = (S.curRub === '__rec__' && a.ts) ? timeAgo(a.ts) : a.date;
+      h += '<div class="arow" style="animation-delay:' + Math.min(i * 15, 300) + 'ms" data-regkey="' + k + '">' +
+        '<div class="row-ico col' + a.colorIdx + '">' + CFG.icons[a.colorIdx] + '</div>' +
+        '<div class="row-inf"><div class="row-title">' + hlText(a.name, q) + '</div>' +
+        '<div class="row-meta"><span class="row-rub tc' + a.colorIdx + '">' + esc(a.rubrique) + '</span><span>' + rmeta + '</span><span>' + a.size + '</span></div></div>' +
+        '<span class="row-open">\u2197</span></div>';
+    });
+    h += '</div>';
+  }
+  htm('art-cont', h);
+  // Article click delegation
+  el('art-cont').onclick = function(e) {
+    var t = e.target;
+    while (t && t !== this) {
+      if (t.dataset && t.dataset.regkey) {
+        var d = regGet(t.dataset.regkey);
+        if (d) {
+          if (d.isDemo) { alert('Mode demo'); return; }
+          if (d.item) addRecent(S.section, d.item);
+          window.open(d.link, '_blank');
+          if (S.curRub === '__rec__') renderItems(); else renderSidebar();
+        }
+        return;
+      }
+      t = t.parentElement;
+    }
+  };
+}
+
+function setView(v) {
+  S.curView = v;
+  el('vbtn-grid').classList.toggle('on', v === 'grid');
+  el('vbtn-list').classList.toggle('on', v === 'list');
+  renderItems();
+}
+
+function setScope(s) {
+  S.curScope = s;
+  el('sc-title').classList.toggle('on', s === 'title');
+  el('sc-content').classList.toggle('on', s === 'content');
+  renderItems();
+}
+
+function onSearch(v) {
+  S.curSearch = v;
+  renderItems();
+}
+
+// VIDEOS
+function openVideos() {
+  S.section = 'videos';
+  showOnly('screen-videos');
+  setBreadcrumb(['Videos']);
+  show('btn-refresh');
+  openVideoLevel(null, []);
+}
+
+async function openVideoLevel(parentId, path) {
+  S.vidSess++;
+  var mySess = S.vidSess;
+  S.vidPath = path;
+
+  renderVPathbar(path);
+  htm('vcont', '<div class="loading-st"><div class="spinner"></div></div>');
+
+  try {
+    var folders = [], videos = [];
+    if (parentId === null) {
+      var infos = await Promise.all(CFG.videoFolders.map(function(fid) {
+        return gapi.client.drive.files.get({ fileId: fid, fields: 'id,name' })
+          .then(function(r) { return r.result; }).catch(function() { return null; });
+      }));
+      infos.forEach(function(x) { if (x) folders.push(x); });
+    } else {
+      var pt = null;
+      do {
+        var params = {
+          q: "'" + parentId + "' in parents and trashed=false",
+          fields: 'nextPageToken,files(id,name,mimeType,fileExtension,size,thumbnailLink,webViewLink)',
+          orderBy: 'name', pageSize: 500
+        };
+        if (pt) params.pageToken = pt;
+        var res = await gapi.client.drive.files.list(params);
+        (res.result.files || []).forEach(function(f) {
+          if (f.mimeType === 'application/vnd.google-apps.folder') folders.push(f);
+          else if (isVideo(f)) videos.push(f);
+        });
+        pt = res.result.nextPageToken || null;
+      } while (pt);
+    }
+    if (S.vidSess !== mySess) return;
+    renderVideoLevel(folders, videos, path);
+  } catch(e) {
+    if (S.vidSess !== mySess) return;
+    htm('vcont', '<div class="empty-st"><div class="empty-ico">!</div><div class="empty-t">Erreur</div><div class="empty-s">' + esc(e.message || String(e)) + '</div></div>');
+  }
+}
+
+function isVideo(f) {
+  var VEXT = ['mp4','avi','mov','mkv','webm','mpg','mpeg','wmv','flv','m4v','ts','3gp'];
+  if (f.fileExtension && VEXT.indexOf(f.fileExtension.toLowerCase()) !== -1) return true;
+  if (f.mimeType && f.mimeType.indexOf('video/') === 0) return true;
+  var ext = (f.name || '').split('.').pop().toLowerCase();
+  return VEXT.indexOf(ext) !== -1;
+}
+
+function renderVPathbar(path) {
+  var recCnt = getRecents('videos').length;
+  var h = '<span class="vp-item" data-vroot="1">\u{1F3AC} Videos</span>' +
+    '<span style="margin-left:12px;padding:3px 10px;background:var(--dark);color:var(--paper);border-radius:20px;font-size:12px;font-weight:600;cursor:pointer" data-vrecents="1">\u{1F552} R\u00e9cents (' + recCnt + ')</span>';
+  path.forEach(function(p, i) {
+    h += '<span class="vp-sep">&rsaquo;</span>';
+    if (i < path.length - 1) {
+      var k = regSet({ id: p.id, path: path.slice(0, i + 1) });
+      h += '<span class="vp-item" data-regkey="' + k + '">' + esc(p.name) + '</span>';
+    } else {
+      h += '<span class="vp-cur">' + esc(p.name) + '</span>';
+    }
+  });
+  htm('vpathbar', h);
+  // Update top breadcrumb
+  if (path.length === 0) {
+    setBreadcrumb(['Videos']);
+  } else {
+    var bcParts = ['Videos'].concat(path.map(function(p) { return p.name; }));
+    var bcActions = [function() { openVideoLevel(null, []); }];
+    path.forEach(function(p, i) {
+      if (i < path.length - 1) {
+        var pSnap = path.slice(0, i + 1);
+        bcActions.push(function() { openVideoLevel(p.id, pSnap); });
+      }
+    });
+    setBreadcrumb(bcParts, bcActions);
+  }
+}
+
+function renderVideoRecents() {
+  var lst = getRecents('videos');
+  if (!lst.length) {
+    htm('vcont', '<div class="empty-st"><div class="empty-ico">\u{1F552}</div><div class="empty-t">Aucune consultation</div><div class="empty-s">Vos derni\u00e8res vid\u00e9os appara\u00eetront ici.</div></div>');
+    return;
+  }
+  var h = '<div class="vsec-title">\u{1F552} Vid\u00e9os r\u00e9centes</div><div class="vgrid">';
+  lst.forEach(function(v, i) {
+    var k = regSet({ type: 'video', link: v.link, vdata: v });
+    var th = v.thumb ? '<img src="' + esc(v.thumb) + '" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0" onerror="this.style.display=\x27none\x27">' : '';
+    h += '<div class="vcard" style="animation-delay:' + Math.min(i*20,300) + 'ms" data-regkey="' + k + '">' +
+      '<div class="vthumb">' + th + '<span class="vplay">\u25B6\uFE0F</span></div>' +
+      '<div class="vbody"><div class="vtitle">' + esc(v.name) + '</div>' +
+      '<div class="vmeta"><span>' + timeAgo(v.ts) + '</span><span class="vopen">Regarder &rarr;</span></div></div></div>';
+  });
+  h += '</div>';
+  htm('vcont', h);
+}
+
+function renderVideoLevel(folders, videos, path) {
+  var h = '';
+  if (folders.length > 0) {
+    h += '<div class="vsec-title">' + (path.length === 0 ? 'Collections' : '\u{1F4C1} Sous-dossiers') + '</div>';
+    h += '<div class="vgrid">';
+    folders.forEach(function(f, i) {
+      var newPath = path.concat([{ id: f.id, name: f.name }]);
+      var k = regSet({ type: 'folder', id: f.id, path: newPath });
+      h += '<div class="fcard" style="animation-delay:' + Math.min(i * 30, 300) + 'ms;animation:fadeUp .3s ease both" data-regkey="' + k + '">' +
+        '<div class="fcard-ico">\u{1F4C1}</div>' +
+        '<div><div class="fcard-name">' + esc(f.name) + '</div><div class="fcard-meta">Ouvrir &rarr;</div></div>' +
+        '</div>';
+    });
+    h += '</div>';
+  }
+  if (videos.length > 0) {
+    h += '<div class="vsec-title"' + (folders.length > 0 ? ' style="margin-top:8px"' : '') + '>\u{1F3AC} Videos (' + videos.length + ')</div>';
+    h += '<div class="vgrid">';
+    videos.forEach(function(v, i) {
+      var link = v.webViewLink || ('https://drive.google.com/file/d/' + v.id + '/view');
+      var k = regSet({ type: 'video', link: link, vdata: v });
+      var thumb = v.thumbnailLink ? v.thumbnailLink.replace('=s220', '=s400') : '';
+      var size = v.size ? fmtSize(parseInt(v.size)) : '';
+      var thtml = thumb
+        ? '<img src="' + esc(thumb) + '" style="width:100%;height:100%;object-fit:cover;position:absolute;top:0;left:0" onerror="this.style.display=\'none\'">' +
+          '<span class="vplay">\u25B6\uFE0F</span>'
+        : '<span class="vplay">\u25B6\uFE0F</span>';
+      h += '<div class="vcard" style="animation-delay:' + Math.min(i * 20, 300) + 'ms" data-regkey="' + k + '">' +
+        '<div class="vthumb">' + thtml + '</div>' +
+        '<div class="vbody"><div class="vtitle">' + esc(v.name.replace(/\.[^.]+$/, '')) + '</div>' +
+        '<div class="vmeta"><span>' + size + '</span><span class="vopen">Regarder &rarr;</span></div></div></div>';
+    });
+    h += '</div>';
+  }
+  if (!folders.length && !videos.length) {
+    h = '<div class="empty-st"><div class="empty-ico">\u{1F4ED}</div><div class="empty-t">Dossier vide</div></div>';
+  }
+  htm('vcont', h);
+}
+</script>
+</body>
+</html>
