@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Bibliotheque Scientifique - MAJ 22/04/2026 16:05 - Cache partage sur Google Drive (stale-while-revalidate) -->
+<!-- Bibliotheque Scientifique - MAJ 22/04/2026 16:46 - Cache Drive + scope email -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -355,7 +355,7 @@ var CFG = {
     '1D5ckEGVWzskxXBk1gb115NrISNI4NWTQ',
     '10xFATIRNwmDgOFlzZMYAO6ebFG_OvRFI'
   ],
-  scopes:   'https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file',
+  scopes:   'openid email profile https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/drive.file',
   discDoc:  'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest',
   cacheTTL: 24 * 3600 * 1000,
   // Admin (seul a pouvoir ecrire le cache sur Drive)
@@ -530,19 +530,29 @@ function resetBtn() {
 function showErr(m) { var e = el('err-msg'); if (e) { e.textContent = m; e.style.display = 'block'; } }
 
 function onSignedIn() {
+  // Fetch email AVANT d'aller plus loin, pour que isAdmin() soit fiable des le depart
   gapi.client.request({ path: 'https://www.googleapis.com/oauth2/v2/userinfo' })
   .then(function(r) {
     var u = r.result || {};
     S.userEmail = (u.email || '').toLowerCase();
+    if (!S.userEmail) {
+      console.warn('[bib] userinfo n\'a pas renvoye d\'email. Scopes insuffisants ?');
+    }
     txt('u-name', u.name || u.email || 'Connecte');
     if (u.picture) htm('u-av', '<img src="' + u.picture + '">');
     else txt('u-av', (u.name || 'U').charAt(0).toUpperCase());
     saveSession(gapi.client.getToken(), u);
+    show('topbar');
+    goHome();
+    preloadMeta();
   })
-  .catch(function() { txt('u-name', 'Connecte'); });
-  show('topbar');
-  goHome();
-  preloadMeta();
+  .catch(function(err) {
+    console.error('[bib] userinfo failed:', err);
+    txt('u-name', 'Connecte');
+    show('topbar');
+    goHome();
+    preloadMeta();
+  });
 }
 
 function signOut() {
@@ -711,15 +721,33 @@ function autoLogin() {
     gapi.load('client', function() {
       gapi.client.init({ discoveryDocs: [CFG.discDoc] }).then(function() {
         gapi.client.setToken(saved.token);
+        var hadEmail = false;
         if (saved.user) {
           S.userEmail = (saved.user.email || '').toLowerCase();
+          hadEmail = !!S.userEmail;
           txt('u-name', saved.user.name || saved.user.email || 'Connecte');
           if (saved.user.picture) htm('u-av', '<img src="' + saved.user.picture + '">');
           else txt('u-av', ((saved.user.name || 'U').charAt(0)).toUpperCase());
         }
         show('topbar');
         goHome();
-        preloadMeta();
+        // Si email manquant (ancienne session), re-fetch depuis userinfo
+        if (!hadEmail) {
+          gapi.client.request({ path: 'https://www.googleapis.com/oauth2/v2/userinfo' })
+            .then(function(r) {
+              var u = r.result || {};
+              if (u.email) {
+                S.userEmail = u.email.toLowerCase();
+                // Remettre en cache la session avec l'email
+                var mergedUser = Object.assign({}, saved.user || {}, u);
+                saveSession(saved.token, mergedUser);
+              }
+              preloadMeta();
+            })
+            .catch(function() { preloadMeta(); });
+        } else {
+          preloadMeta();
+        }
       }).catch(clearSession);
     });
   }, 150);
@@ -940,7 +968,17 @@ async function doLoadBrowser(folderId, force) {
 
   // 3) Pas de cache ou force : scan Drive complet
   if (!isAdmin() && !force) {
-    htm('art-cont', '<div class="empty-st"><div class="empty-ico">\u{1F4E1}</div><div class="empty-t">Cache indisponible</div><div class="empty-s">Le fichier de cache Drive est absent.<br>L\'administrateur doit l\'initialiser une premiere fois.</div></div>');
+    var diag = S.userEmail
+      ? ('Compte connecte : ' + esc(S.userEmail) + '<br>Admin requis : ' + esc(CFG.adminEmail))
+      : ('Aucun email detecte - deconnectez-vous et reconnectez-vous pour autoriser le nouveau scope.');
+    htm('art-cont',
+      '<div class="empty-st">' +
+      '<div class="empty-ico">\u{1F4E1}</div>' +
+      '<div class="empty-t">Cache indisponible</div>' +
+      '<div class="empty-s">Le fichier de cache Drive est absent.<br>' +
+      'L\'administrateur doit l\'initialiser une premiere fois.<br><br>' +
+      '<span style="font-family:monospace;font-size:11px;opacity:.75">' + diag + '</span>' +
+      '</div></div>');
     return;
   }
 
