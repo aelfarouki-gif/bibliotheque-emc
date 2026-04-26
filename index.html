@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Bibliotheque Scientifique - MAJ 22/04/2026 16:46 - Cache Drive + scope email -->
+<!-- Bibliotheque Scientifique - MAJ 26/04/2026 05:36 - Vague 2 : sync Drive + tags + notes + stats + export + collections + vocale -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -14,7 +14,84 @@
   --paper:#f5f2eb;--cream:#faf8f3;--cream2:#f0ede6;
   --text1:#1a1a2e;--text2:#4a4a6a;--text3:#8888aa;
   --border:#e8e4dc;--shadow:0 2px 12px rgba(0,0,0,0.08);
+  --fav:#f59e0b;--fav-bg:rgba(245,158,11,.1);
 }
+body.dark-mode{
+  --paper:#1e293b;--cream:#0f172a;--cream2:#1e293b;
+  --text1:#f1f5f9;--text2:#cbd5e1;--text3:#64748b;
+  --border:#334155;--shadow:0 2px 12px rgba(0,0,0,0.35);
+}
+body.dark-mode .topbar{background:#020617 !important}
+body.dark-mode .c-thumb-book{background:linear-gradient(135deg,#334155,#1e293b)}
+body.dark-mode mark{background:#facc15;color:#0f172a}
+/* Cartes en mode sombre */
+body.dark-mode .hcard,
+body.dark-mode .ecard,
+body.dark-mode .acard,
+body.dark-mode .arow,
+body.dark-mode .fcard,
+body.dark-mode .vcard{background:#1e293b;color:var(--text1)}
+body.dark-mode .acard:hover,
+body.dark-mode .arow:hover,
+body.dark-mode .fcard:hover{background:#293548}
+/* Inputs / selects en mode sombre */
+body.dark-mode .sort-sel,
+body.dark-mode .sc-btn,
+body.dark-mode .view-btn.on{background:#1e293b;color:var(--text1);border-color:var(--border)}
+body.dark-mode .srch-inp{background:transparent;color:var(--text1)}
+body.dark-mode .srch-inp::placeholder{color:var(--text3)}
+body.dark-mode .srch-wrap{background:#1e293b}
+/* Body et écrans */
+body.dark-mode{background:var(--cream)}
+body.dark-mode .main-c{background:var(--cream)}
+body.dark-mode .login-card{background:#1e293b;color:var(--text1)}
+body.dark-mode .home-hero,
+body.dark-mode #screen-home,
+body.dark-mode #screen-browser,
+body.dark-mode #screen-ebook-home,
+body.dark-mode #screen-videos{background:var(--cream)}
+/* Sidebar */
+body.dark-mode .sidebar{background:#0b1424;border-color:var(--border);color:var(--text1)}
+body.dark-mode .rub-btn{color:var(--text2)}
+body.dark-mode .rub-btn:hover{background:#1e293b}
+body.dark-mode .rub-btn.active{background:#293548;color:var(--text1)}
+/* Footer / divers */
+body.dark-mode .topbar-r .u-chip{background:rgba(255,255,255,.08)}
+body.dark-mode .c-rub{opacity:.85}
+body.dark-mode .row-rub{opacity:.85}
+
+/* Favoris */
+.fav-star{cursor:pointer;font-size:18px;color:var(--text3);transition:all .15s;user-select:none;background:none;border:none;padding:4px}
+.fav-star:hover{color:var(--fav);transform:scale(1.15)}
+.fav-star.is-fav{color:var(--fav)}
+.item-c{position:relative}
+.item-fav-btn{position:absolute;top:8px;right:8px;z-index:5}
+
+/* Cache indicator */
+.cache-ind{font-size:11px;color:var(--text3);padding:4px 8px;cursor:pointer;user-select:none;font-family:monospace}
+.cache-ind:hover{color:var(--accent);text-decoration:underline}
+
+/* Dark mode toggle */
+.theme-toggle{background:none;border:1px solid rgba(255,255,255,.2);color:var(--paper);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px;transition:all .15s}
+.theme-toggle:hover{background:rgba(255,255,255,.1)}
+
+/* Warning d'inactivité */
+#inact-warn{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;background:#0d1b2e;color:#fff;border-radius:12px;padding:16px 24px;box-shadow:0 8px 32px rgba(0,0,0,.5);align-items:center;gap:16px;min-width:380px;max-width:90vw}
+#inact-warn button{padding:8px 16px;border:none;border-radius:8px;background:#c8a96e;color:#0d1b2e;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
+
+/* Share button */
+.item-share-btn{position:absolute;top:8px;right:40px;z-index:5;background:none;border:none;font-size:15px;cursor:pointer;color:var(--text3);opacity:0;transition:opacity .2s;padding:4px}
+.item-c:hover .item-share-btn{opacity:1}
+.item-share-btn:hover{color:var(--accent)}
+
+/* Recherche améliorée */
+.srch-hint{font-size:11px;color:var(--text3);margin-top:4px;padding:0 8px}
+.srch-fulltext-btn{margin-left:8px;padding:4px 10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer}
+.srch-fulltext-btn:hover{opacity:.9}
+.srch-fulltext-btn.loading{opacity:.6;cursor:wait}
+
+/* Filtre favoris */
+.filt-fav-active{background:var(--fav-bg);color:var(--fav);font-weight:700}
 html,body{height:100%;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text1)}
 .hidden{display:none!important}
 .spinner{width:28px;height:28px;border:3px solid rgba(0,0,0,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
@@ -186,6 +263,84 @@ mark{background:#fef08a;border-radius:2px;padding:0 1px}
 .vcard:hover .vopen{opacity:1}
 
 @media(max-width:600px){.sidebar{display:none}.home-cards,.ebook-cards{padding:0 16px}}
+
+
+/* ═══════ VAGUE 2 — Tags, Notes, Collections, Stats, Export, Vocale ═══════ */
+
+/* Modal génériques V2 */
+.v2-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9998;align-items:center;justify-content:center;padding:20px}
+.v2-modal.show{display:flex}
+.v2-modal-content{background:var(--paper);color:var(--text1);border-radius:16px;padding:24px;max-width:560px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.3)}
+.v2-modal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.v2-modal-h h3{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin:0}
+.v2-modal-close{background:none;border:none;font-size:22px;cursor:pointer;color:var(--text3);padding:4px}
+.v2-modal-close:hover{color:var(--text1)}
+
+/* Tags */
+.tag-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;background:var(--cream2);color:var(--text2);border-radius:12px;font-size:11px;font-weight:600;margin:2px;cursor:pointer;border:1px solid var(--border);user-select:none}
+.tag-chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag-chip:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag-chip-rm{cursor:pointer;font-size:13px;opacity:.6;padding-left:4px}
+.tag-chip-rm:hover{opacity:1}
+.tag-input{padding:7px 12px;border:1px solid var(--border);border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;background:var(--cream);color:var(--text1);width:100%;margin-top:8px}
+
+/* Notes */
+.note-textarea{width:100%;min-height:120px;padding:10px 14px;border:1px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;line-height:1.5;background:var(--cream);color:var(--text1);resize:vertical}
+.note-indicator{position:absolute;bottom:8px;right:8px;font-size:13px;color:var(--accent);background:var(--paper);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px rgba(0,0,0,.15);z-index:4}
+
+/* Boutons V2 */
+.v2-btn{padding:8px 14px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s}
+.v2-btn-primary{background:var(--accent);color:#fff}
+.v2-btn-primary:hover{opacity:.9}
+.v2-btn-secondary{background:var(--cream2);color:var(--text1);border:1px solid var(--border)}
+.v2-btn-secondary:hover{background:var(--border)}
+.v2-btn-danger{background:#dc2626;color:#fff}
+
+/* Stats */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin:16px 0}
+.stat-c{background:var(--cream2);border-radius:12px;padding:16px;text-align:center}
+.stat-v{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--accent);margin-bottom:4px}
+.stat-l{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.5px}
+.stat-list{margin-top:14px}
+.stat-list-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.stat-list-item:last-child{border:none}
+.stat-list-c{color:var(--text3);font-weight:600;font-family:monospace}
+
+/* Collections */
+.coll-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:12px}
+.coll-c{background:var(--cream2);border-radius:12px;padding:16px;cursor:pointer;transition:all .15s;position:relative;border:2px solid transparent}
+.coll-c:hover{border-color:var(--accent);transform:translateY(-2px)}
+.coll-c-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;margin-bottom:4px;color:var(--text1)}
+.coll-c-count{font-size:11px;color:var(--text3)}
+.coll-c-rm{position:absolute;top:8px;right:8px;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px}
+.coll-c-rm:hover{color:#dc2626}
+
+/* Sync indicator */
+.v2-sync-ind{font-size:11px;color:var(--text3);padding:4px 8px;font-family:monospace}
+.v2-sync-ind.syncing{color:var(--accent)}
+.v2-sync-ind.error{color:#dc2626}
+
+/* Vocale */
+.voice-btn{padding:8px 12px;background:transparent;border:1px solid var(--border);border-radius:8px;cursor:pointer;color:var(--text2);font-size:14px;margin-left:6px}
+.voice-btn.recording{background:#dc2626;color:#fff;border-color:#dc2626;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+/* Mode sombre Vague 2 */
+body.dark-mode .v2-modal-content{background:#1e293b}
+body.dark-mode .stat-c,
+body.dark-mode .coll-c,
+body.dark-mode .tag-chip{background:#0f172a;border-color:var(--border)}
+body.dark-mode .note-textarea,
+body.dark-mode .tag-input{background:#0f172a;color:var(--text1)}
+
+/* Boutons d'item enrichis */
+.item-acts{position:absolute;top:8px;left:8px;display:flex;gap:6px;z-index:5}
+.item-act-btn{background:rgba(255,255,255,.95);border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;color:var(--text2);box-shadow:0 1px 4px rgba(0,0,0,.15);opacity:0;transition:all .15s}
+.acard:hover .item-act-btn{opacity:1}
+.item-act-btn:hover{color:var(--accent);transform:scale(1.1)}
+.item-act-btn.has-data{opacity:1;color:var(--accent)}
+body.dark-mode .item-act-btn{background:#293548;color:var(--text2)}
+body.dark-mode .item-act-btn.has-data{background:var(--accent);color:#fff}
 </style>
 </head>
 <body>
@@ -224,8 +379,14 @@ mark{background:#fef08a;border-radius:2px;padding:0 1px}
         <span class="u-name" id="u-name"></span>
       </div>
       <span class="sync-chip hidden" id="sync-chip"><span class="sync-dot"></span><span id="sync-msg">Synchronisation</span></span>
+      <span class="cache-ind hidden" id="cache-ind" title="Date du dernier rafra&icirc;chissement du cache">&#128230; -</span>
+      <span class="v2-sync-ind hidden" id="v2-sync" title="Synchronisation des donn&eacute;es personnelles">&#9737;</span>
+      <button class="theme-toggle" id="btn-stats" title="Statistiques de lecture">&#128202;</button>
+      <button class="theme-toggle" id="btn-collections" title="Mes collections th&eacute;matiques">&#128193;</button>
+      <button class="theme-toggle" id="btn-export" title="Exporter la liste actuelle">&#128229;</button>
+      <button class="theme-toggle" id="btn-theme" title="Basculer mode sombre/clair">&#127769;</button>
       <button class="btn-top hidden" id="btn-refresh">&#128260; Actualiser</button>
-      <button class="btn-top" id="btn-signout">Deconnexion</button>
+      <button class="btn-top" id="btn-signout" title="D&eacute;connexion compl&egrave;te (efface email, cookies, cache local)">Deconnexion</button>
     </div>
   </div>
 </div>
@@ -317,7 +478,7 @@ mark{background:#fef08a;border-radius:2px;padding:0 1px}
       <div class="srch-bar">
         <div class="srch-wrap">
           <span style="font-size:14px;opacity:.4">&#128269;</span>
-          <input class="srch-inp" id="srch-inp" type="text" placeholder="Rechercher...">
+          <input class="srch-inp" id="srch-inp" type="text" placeholder="Rechercher..."><button id="btn-voice" class="voice-btn" onclick="toggleVoiceSearch()" title="Recherche vocale">🎤</button><button id="btn-drive-search" class="srch-fulltext-btn" onclick="searchDriveFullText()" title="Rechercher dans le contenu des PDF via Google Drive">🔍 Contenu PDF</button><button id="filt-fav" class="srch-fulltext-btn" onclick="toggleFavOnly()" style="background:transparent;border:1px solid var(--border);color:var(--text2);margin-left:6px" title="Afficher uniquement les favoris">☆</button>
         </div>
         <div class="scope-btns">
           <button class="sc-btn on" id="sc-title" data-scope="title">Titre</button>
@@ -530,6 +691,7 @@ function resetBtn() {
 function showErr(m) { var e = el('err-msg'); if (e) { e.textContent = m; e.style.display = 'block'; } }
 
 function onSignedIn() {
+  if(typeof udInit === 'function') udInit();
   // Fetch email AVANT d'aller plus loin, pour que isAdmin() soit fiable des le depart
   gapi.client.request({ path: 'https://www.googleapis.com/oauth2/v2/userinfo' })
   .then(function(r) {
@@ -555,9 +717,874 @@ function onSignedIn() {
   });
 }
 
+// ═══════════════════════════════════════════════════════════
+// FAVORIS (Vague 1)
+// ═══════════════════════════════════════════════════════════
+var FAV_KEY = 'bib_favs';
+function loadFavs(){ try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch(e){ return []; } }
+function saveFavs(arr){ try { localStorage.setItem(FAV_KEY, JSON.stringify(arr)); } catch(e){} }
+function isFav(id){ return loadFavs().indexOf(id) !== -1; }
+function toggleFav(id, event){
+  if(event) { event.stopPropagation(); event.preventDefault(); }
+  var favs = loadFavs();
+  var idx = favs.indexOf(id);
+  if(idx !== -1) favs.splice(idx, 1);
+  else favs.unshift(id);
+  saveFavs(favs);
+  // Re-render du bouton sur la carte
+  var btn = document.querySelector('[data-fav-id="' + id + '"]');
+  if(btn){
+    if(isFav(id)){ btn.classList.add('is-fav'); btn.textContent = '\u2605'; }
+    else{ btn.classList.remove('is-fav'); btn.textContent = '\u2606'; }
+  }
+  return false;
+}
+function toggleFavOnly(){
+  S.favOnly = !S.favOnly;
+  var btn = document.getElementById('filt-fav');
+  if(btn) btn.classList.toggle('filt-fav-active', S.favOnly);
+  if(typeof renderItems === 'function') renderItems();
+}
+
+// ═══════════════════════════════════════════════════════════
+// MODE SOMBRE (Vague 1)
+// ═══════════════════════════════════════════════════════════
+var THEME_KEY = 'bib_theme';
+function applyTheme(t){
+  if(t === 'dark') document.body.classList.add('dark-mode');
+  else document.body.classList.remove('dark-mode');
+  var btn = document.getElementById('btn-theme');
+  if(btn) btn.innerHTML = t === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+}
+function toggleTheme(){
+  var cur = localStorage.getItem(THEME_KEY) || 'light';
+  var next = cur === 'dark' ? 'light' : 'dark';
+  try { localStorage.setItem(THEME_KEY, next); } catch(e){}
+  applyTheme(next);
+}
+// Appliquer le thème au chargement (avant rendu visible)
+(function(){ try { applyTheme(localStorage.getItem(THEME_KEY) || 'light'); } catch(e){} })();
+
+// ═══════════════════════════════════════════════════════════
+// INDICATEUR DE CACHE (Vague 1)
+// ═══════════════════════════════════════════════════════════
+function updateCacheIndicator(){
+  var el = document.getElementById('cache-ind');
+  if(!el) return;
+  // Chercher la dernière date de fetch stockée
+  var ts = 0;
+  try {
+    for(var i = 0; i < localStorage.length; i++){
+      var k = localStorage.key(i);
+      if(k && k.indexOf('bib_cache_ts_') === 0){
+        var v = parseInt(localStorage.getItem(k) || '0', 10);
+        if(v > ts) ts = v;
+      }
+    }
+  } catch(e){}
+  if(!ts){ el.classList.add('hidden'); return; }
+  el.classList.remove('hidden');
+  el.innerHTML = '\uD83D\uDCE6 ' + timeAgo(ts);
+}
+function markCacheUpdated(section){
+  try { localStorage.setItem('bib_cache_ts_' + section, String(Date.now())); } catch(e){}
+  updateCacheIndicator();
+}
+setInterval(updateCacheIndicator, 60000); // Refresh chaque minute
+
+// ═══════════════════════════════════════════════════════════
+// PARTAGE DE LIEN (Vague 1)
+// ═══════════════════════════════════════════════════════════
+function shareItem(item, event){
+  if(event) { event.stopPropagation(); event.preventDefault(); }
+  var text = item.name + (item.rubrique ? ' - ' + item.rubrique : '');
+  var link = item.link || '';
+  if(navigator.share){
+    // API Web Share (mobile surtout)
+    navigator.share({ title: item.name, text: text, url: link }).catch(function(){});
+  } else {
+    // Fallback : copier dans le presse-papiers
+    var toCopy = text + '\n' + link;
+    try {
+      navigator.clipboard.writeText(toCopy).then(function(){
+        alert('\u2714 Lien copi\u00e9 dans le presse-papiers');
+      });
+    } catch(e){
+      prompt('Copiez le lien :', toCopy);
+    }
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════════════════════════
+// RECHERCHE FULL-TEXT GOOGLE DRIVE (Vague 1 - Niveau 2)
+// ═══════════════════════════════════════════════════════════
+async function searchDriveFullText(){
+  var inp = document.getElementById('srch-inp');
+  if(!inp || !inp.value.trim()){ alert('Entrez un terme de recherche.'); return; }
+  var q = inp.value.trim();
+  var btn = document.getElementById('btn-drive-search');
+  if(btn){ btn.classList.add('loading'); btn.textContent = 'Recherche...'; }
+  try {
+    // Détermination du folder à chercher selon la section
+    var folderId = null;
+    if(S.section === 'articles') folderId = CFG.folderEMC;
+    else if(S.section === 'ebook-fr') folderId = CFG.folderFR;
+    else if(S.section === 'ebook-en') folderId = CFG.folderEN;
+
+    var query = "fullText contains '" + q.replace(/'/g, "\\'") + "' and trashed=false";
+    // Restreindre au folder si possible (via parents en recursif)
+    // Note : Drive ne supporte pas récursif direct, donc on filtre par mimeType PDF
+    query += " and mimeType='application/pdf'";
+
+    var res = await gapi.client.drive.files.list({
+      q: query,
+      fields: 'files(id,name,size,modifiedTime,webViewLink,parents)',
+      pageSize: 100,
+      orderBy: 'modifiedTime desc'
+    });
+    var files = (res.result && res.result.files) || [];
+
+    if(btn){ btn.classList.remove('loading'); btn.innerHTML = '\uD83D\uDD0D Contenu PDF'; }
+
+    if(!files.length){
+      alert('Aucun document ne contient "' + q + '" dans son contenu.');
+      return;
+    }
+
+    // Afficher les résultats dans l'UI principale
+    var cont = document.getElementById('art-cont');
+    if(!cont){ alert(files.length + ' r\u00e9sultat(s) trouv\u00e9(s).'); return; }
+
+    var html = '<div style="padding:16px 20px 8px;color:var(--text2);font-size:13px">'
+      + '\uD83D\uDD0D ' + files.length + ' document(s) contenant "' + esc(q) + '" dans leur contenu PDF '
+      + '<button onclick="onSearch(\'\');renderItems()" style="margin-left:10px;padding:4px 10px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px">Retour</button>'
+      + '</div><div class="item-grid" style="padding:16px 20px">';
+    files.forEach(function(f){
+      var link = f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view');
+      html += '<div class="item-c" onclick="window.open(\'' + esc(link) + '\',\'_blank\')" style="cursor:pointer">'
+        + '<div class="c-thumb-book"><div class="book-spine"></div><span class="thumb-ph">\uD83D\uDCD6</span></div>'
+        + '<div class="item-n" style="font-weight:600;font-size:13px;margin-top:8px">' + esc(f.name) + '</div>'
+        + '<div class="item-m" style="font-size:11px;color:var(--text3);margin-top:4px">' + fmtSize(parseInt(f.size||'0',10)) + '</div>'
+        + '</div>';
+    });
+    html += '</div>';
+    cont.innerHTML = html;
+  } catch(e){
+    if(btn){ btn.classList.remove('loading'); btn.innerHTML = '\uD83D\uDD0D Contenu PDF'; }
+    alert('Erreur : ' + (e.message || e));
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
+// DÉCONNEXION AUTO PAR INACTIVITÉ (Vague 1)
+// ═══════════════════════════════════════════════════════════
+var _inactTimer = null;
+function _resetInact(){
+  // Ne tourne que si user connecté
+  var tb = document.getElementById('topbar');
+  if(!tb || tb.classList.contains('hidden')) return;
+  clearTimeout(_inactTimer);
+  var w = document.getElementById('inact-warn'); if(w) w.style.display = 'none';
+  _inactTimer = setTimeout(function(){
+    var w = document.getElementById('inact-warn'); if(w) w.style.display = 'flex';
+    _inactTimer = setTimeout(function(){
+      var w = document.getElementById('inact-warn'); if(w) w.style.display = 'none';
+      signOut(); // Déclenche la déconnexion complète
+    }, 2 * 60 * 1000);
+  }, 28 * 60 * 1000);
+}
+['mousedown','keydown','touchstart','scroll','click'].forEach(function(ev){
+  document.addEventListener(ev, _resetInact, { passive: true });
+});
+
+// ═══════════════════════════════════════════════════════════
+// RACCOURCI CLAVIER "/" POUR FOCUS RECHERCHE (Vague 1)
+// ═══════════════════════════════════════════════════════════
+document.addEventListener('keydown', function(e){
+  if(e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA'){
+    var inp = document.getElementById('srch-inp');
+    if(inp){ e.preventDefault(); inp.focus(); inp.select(); }
+  }
+  if(e.key === 'Escape'){
+    var inp = document.getElementById('srch-inp');
+    if(inp && document.activeElement === inp){
+      inp.value = '';
+      onSearch('');
+      inp.blur();
+    }
+  }
+});
+
+
+
+// ═══════════════════════════════════════════════════════════════════
+// VAGUE 2 — INFRASTRUCTURE USERDATA SYNC GOOGLE DRIVE
+// ═══════════════════════════════════════════════════════════════════
+//
+// Stockage : 1 seul fichier JSON dans le Drive de l'utilisateur (racine).
+// Nom du fichier : bib_userdata.json
+// Structure : { favorites:[], tags:{itemId:[tags]}, notes:{itemId:note},
+//              collections:[{id,name,items:[]}], stats:{viewCount:{itemId:n}, lastView:{itemId:ts}} }
+// Cache local : USERDATA_KEY pour éviter les requêtes excessives
+// Sync : auto au démarrage + après chaque modification (debounced)
+
+var USERDATA_KEY = 'bib_userdata';
+var USERDATA_FILE_ID_KEY = 'bib_userdata_fileid';
+var UD = { favorites: [], tags: {}, notes: {}, collections: [], stats: { viewCount: {}, lastView: {} }, version: 1 };
+var _udSaveTimer = null;
+var _udSyncing = false;
+
+function udLoadFromCache() {
+  try {
+    var c = localStorage.getItem(USERDATA_KEY);
+    if (c) {
+      var parsed = JSON.parse(c);
+      // Merge avec defaults pour éviter les undefined
+      UD.favorites = parsed.favorites || [];
+      UD.tags = parsed.tags || {};
+      UD.notes = parsed.notes || {};
+      UD.collections = parsed.collections || [];
+      UD.stats = parsed.stats || { viewCount: {}, lastView: {} };
+      UD.version = parsed.version || 1;
+    }
+  } catch(e) {}
+}
+
+function udSaveCache() {
+  try { localStorage.setItem(USERDATA_KEY, JSON.stringify(UD)); } catch(e) {}
+}
+
+function udSetSyncStatus(state) {
+  var el = document.getElementById('v2-sync');
+  if (!el) return;
+  el.classList.remove('hidden', 'syncing', 'error');
+  if (state === 'syncing') { el.classList.add('syncing'); el.textContent = '\u2737 sync...'; }
+  else if (state === 'ok') { el.textContent = '\u2737 sync\u00e9'; setTimeout(function(){ var e=document.getElementById('v2-sync'); if(e) e.classList.add('hidden'); }, 2000); }
+  else if (state === 'error') { el.classList.add('error'); el.textContent = '\u2737 erreur'; }
+}
+
+// Trouver le fichier bib_userdata.json dans le Drive de l'user
+async function udFindFile() {
+  try {
+    var cachedId = localStorage.getItem(USERDATA_FILE_ID_KEY);
+    if (cachedId) return cachedId;
+    var r = await gapi.client.drive.files.list({
+      q: "name='bib_userdata.json' and trashed=false",
+      fields: 'files(id,name)',
+      pageSize: 5,
+      spaces: 'drive'
+    });
+    var files = (r.result && r.result.files) || [];
+    if (files.length) {
+      try { localStorage.setItem(USERDATA_FILE_ID_KEY, files[0].id); } catch(e) {}
+      return files[0].id;
+    }
+    return null;
+  } catch(e) { console.warn('udFindFile error:', e); return null; }
+}
+
+async function udFetchFromDrive() {
+  try {
+    var fid = await udFindFile();
+    if (!fid) return false;
+    var r = await gapi.client.drive.files.get({ fileId: fid, alt: 'media' });
+    if (r && r.body) {
+      var parsed = JSON.parse(r.body);
+      UD.favorites = parsed.favorites || [];
+      UD.tags = parsed.tags || {};
+      UD.notes = parsed.notes || {};
+      UD.collections = parsed.collections || [];
+      UD.stats = parsed.stats || { viewCount: {}, lastView: {} };
+      UD.version = parsed.version || 1;
+      udSaveCache();
+      return true;
+    }
+  } catch(e) { console.warn('udFetchFromDrive error:', e); }
+  return false;
+}
+
+async function udPushToDrive() {
+  if (_udSyncing) return false;
+  _udSyncing = true;
+  udSetSyncStatus('syncing');
+  try {
+    var body = JSON.stringify(UD);
+    var fid = await udFindFile();
+    if (fid) {
+      var r = await gapi.client.request({
+        path: '/upload/drive/v3/files/' + fid,
+        method: 'PATCH',
+        params: { uploadType: 'media' },
+        headers: { 'Content-Type': 'application/json' },
+        body: body
+      });
+      _udSyncing = false;
+      udSetSyncStatus('ok');
+      return !!(r && (r.status === 200 || r.status === 204 || r.result));
+    } else {
+      // Créer le fichier
+      var boundary = '-----bib-ud-' + Date.now();
+      var delimiter = '\r\n--' + boundary + '\r\n';
+      var closeDelim = '\r\n--' + boundary + '--';
+      var metadata = { name: 'bib_userdata.json', mimeType: 'application/json' };
+      var multipart = delimiter +
+        'Content-Type: application/json; charset=UTF-8\r\n\r\n' + JSON.stringify(metadata) +
+        delimiter +
+        'Content-Type: application/json; charset=UTF-8\r\n\r\n' + body +
+        closeDelim;
+      var r2 = await gapi.client.request({
+        path: '/upload/drive/v3/files',
+        method: 'POST',
+        params: { uploadType: 'multipart' },
+        headers: { 'Content-Type': 'multipart/related; boundary="' + boundary + '"' },
+        body: multipart
+      });
+      if (r2 && r2.result && r2.result.id) {
+        try { localStorage.setItem(USERDATA_FILE_ID_KEY, r2.result.id); } catch(e) {}
+      }
+      _udSyncing = false;
+      udSetSyncStatus('ok');
+      return !!(r2 && r2.result);
+    }
+  } catch(e) {
+    console.warn('udPushToDrive error:', e);
+    _udSyncing = false;
+    udSetSyncStatus('error');
+    return false;
+  }
+}
+
+// Push debounced — appelé après chaque modif
+function udMarkDirty() {
+  udSaveCache();
+  clearTimeout(_udSaveTimer);
+  _udSaveTimer = setTimeout(function(){ udPushToDrive(); }, 1500);
+}
+
+// Initialisation au login : charger depuis Drive
+async function udInit() {
+  udLoadFromCache(); // Cache d'abord pour réactivité
+  // Migration : si on a des bib_favs en local mais pas dans UD → migrer
+  try {
+    var legacyFavs = JSON.parse(localStorage.getItem('bib_favs') || '[]');
+    if (legacyFavs.length && !UD.favorites.length) {
+      UD.favorites = legacyFavs;
+      udSaveCache();
+    }
+  } catch(e) {}
+  // Puis fetch Drive en arrière-plan (peut écraser le cache si plus récent)
+  setTimeout(function(){ udFetchFromDrive().then(function(){
+    if (typeof renderItems === 'function') renderItems();
+  }); }, 500);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// FAVORIS V2 — pointe vers UD au lieu de localStorage seul
+// ═══════════════════════════════════════════════════════════════════
+function loadFavs() { return UD.favorites || []; }
+function isFav(id) { return (UD.favorites || []).indexOf(id) !== -1; }
+function toggleFav(id, event) {
+  if (event) { event.stopPropagation(); event.preventDefault(); }
+  if (!UD.favorites) UD.favorites = [];
+  var idx = UD.favorites.indexOf(id);
+  if (idx !== -1) UD.favorites.splice(idx, 1);
+  else UD.favorites.unshift(id);
+  udMarkDirty();
+  // Update UI
+  var btn = document.querySelector('[data-fav-id="' + id + '"]');
+  if (btn) {
+    if (isFav(id)) { btn.classList.add('is-fav'); btn.textContent = '\u2605'; }
+    else { btn.classList.remove('is-fav'); btn.textContent = '\u2606'; }
+  }
+  return false;
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// TAGS PERSONNALISÉS
+// ═══════════════════════════════════════════════════════════════════
+function getTags(itemId) { return (UD.tags && UD.tags[itemId]) || []; }
+function addTag(itemId, tag) {
+  if (!UD.tags) UD.tags = {};
+  if (!UD.tags[itemId]) UD.tags[itemId] = [];
+  tag = (tag || '').trim().toLowerCase();
+  if (!tag) return;
+  if (UD.tags[itemId].indexOf(tag) === -1) {
+    UD.tags[itemId].push(tag);
+    udMarkDirty();
+  }
+}
+function removeTag(itemId, tag) {
+  if (!UD.tags || !UD.tags[itemId]) return;
+  var idx = UD.tags[itemId].indexOf(tag);
+  if (idx !== -1) {
+    UD.tags[itemId].splice(idx, 1);
+    if (!UD.tags[itemId].length) delete UD.tags[itemId];
+    udMarkDirty();
+  }
+}
+function getAllTags() {
+  var s = {};
+  Object.keys(UD.tags || {}).forEach(function(id){
+    (UD.tags[id] || []).forEach(function(t){ s[t] = (s[t] || 0) + 1; });
+  });
+  return s; // {tag: count}
+}
+
+function openTagsModal(item) {
+  var m = document.getElementById('v2-modal-tags');
+  if (!m) return;
+  document.getElementById('v2-tags-title').textContent = 'Tags : ' + item.name;
+  document.getElementById('v2-tags-itemid').value = item.id;
+  renderTagsModal(item.id);
+  m.classList.add('show');
+}
+function renderTagsModal(itemId) {
+  var tags = getTags(itemId);
+  var allTags = getAllTags();
+  var listEl = document.getElementById('v2-tags-list');
+  var sugEl = document.getElementById('v2-tags-suggestions');
+  var html = '';
+  tags.forEach(function(t){
+    html += '<span class="tag-chip active">' + esc(t) + '<span class="tag-chip-rm" onclick="removeTag(\'' + itemId + '\',\'' + esc(t) + '\');renderTagsModal(\'' + itemId + '\');refreshItemActsButtons(\'' + itemId + '\')">\u00d7</span></span>';
+  });
+  if (!tags.length) html = '<div style="color:var(--text3);font-size:13px">Aucun tag pour le moment.</div>';
+  listEl.innerHTML = html;
+
+  var sug = '';
+  Object.keys(allTags).forEach(function(t){
+    if (tags.indexOf(t) === -1) {
+      sug += '<span class="tag-chip" onclick="addTag(\'' + itemId + '\',\'' + esc(t) + '\');renderTagsModal(\'' + itemId + '\');refreshItemActsButtons(\'' + itemId + '\')">' + esc(t) + ' <small>(' + allTags[t] + ')</small></span>';
+    }
+  });
+  sugEl.innerHTML = sug ? '<div style="font-size:11px;color:var(--text3);margin-top:12px;text-transform:uppercase">Tags d&eacute;j&agrave; utilis&eacute;s</div><div style="margin-top:6px">' + sug + '</div>' : '';
+}
+function addTagFromInput() {
+  var inp = document.getElementById('v2-tags-input');
+  var itemId = document.getElementById('v2-tags-itemid').value;
+  if (!inp.value.trim() || !itemId) return;
+  addTag(itemId, inp.value);
+  inp.value = '';
+  renderTagsModal(itemId);
+  refreshItemActsButtons(itemId);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// NOTES PERSONNELLES
+// ═══════════════════════════════════════════════════════════════════
+function getNote(itemId) { return (UD.notes && UD.notes[itemId]) || ''; }
+function setNote(itemId, txt) {
+  if (!UD.notes) UD.notes = {};
+  if (txt && txt.trim()) UD.notes[itemId] = txt.trim();
+  else delete UD.notes[itemId];
+  udMarkDirty();
+}
+function openNoteModal(item) {
+  var m = document.getElementById('v2-modal-note');
+  if (!m) return;
+  document.getElementById('v2-note-title').textContent = 'Note : ' + item.name;
+  document.getElementById('v2-note-itemid').value = item.id;
+  document.getElementById('v2-note-textarea').value = getNote(item.id);
+  m.classList.add('show');
+  setTimeout(function(){ document.getElementById('v2-note-textarea').focus(); }, 100);
+}
+function saveNoteFromModal() {
+  var itemId = document.getElementById('v2-note-itemid').value;
+  var t = document.getElementById('v2-note-textarea').value;
+  setNote(itemId, t);
+  closeV2Modal('v2-modal-note');
+  refreshItemActsButtons(itemId);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// STATISTIQUES
+// ═══════════════════════════════════════════════════════════════════
+function recordView(itemId) {
+  if (!UD.stats) UD.stats = { viewCount: {}, lastView: {} };
+  UD.stats.viewCount[itemId] = (UD.stats.viewCount[itemId] || 0) + 1;
+  UD.stats.lastView[itemId] = Date.now();
+  udMarkDirty();
+}
+function openStatsModal() {
+  var m = document.getElementById('v2-modal-stats');
+  if (!m) return;
+  var vc = (UD.stats && UD.stats.viewCount) || {};
+  var lv = (UD.stats && UD.stats.lastView) || {};
+  var totalViews = 0;
+  var totalItems = Object.keys(vc).length;
+  Object.values(vc).forEach(function(n){ totalViews += n; });
+
+  // Top 10
+  var sorted = Object.keys(vc).sort(function(a,b){ return vc[b] - vc[a]; }).slice(0, 10);
+  var topHtml = '';
+  sorted.forEach(function(id){
+    var data = regGet ? null : null; // pas accessible direct ici
+    // Chercher le nom dans les caches
+    var name = id;
+    if (S.allItems) {
+      var found = S.allItems.find(function(a){ return a.id === id; });
+      if (found) name = found.name;
+    }
+    topHtml += '<div class="stat-list-item"><span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:10px">' + esc(name.substring(0, 60)) + '</span><span class="stat-list-c">' + vc[id] + '\u202F\u00d7</span></div>';
+  });
+
+  // Activité récente (30 derniers jours)
+  var now = Date.now();
+  var lastMonth = 0, lastWeek = 0;
+  Object.values(lv).forEach(function(ts){
+    if (now - ts < 30 * 86400000) lastMonth++;
+    if (now - ts < 7 * 86400000) lastWeek++;
+  });
+
+  var totalFavs = (UD.favorites || []).length;
+  var totalTags = Object.keys(UD.tags || {}).length;
+  var totalNotes = Object.keys(UD.notes || {}).length;
+
+  var content = '' +
+    '<div class="stat-grid">' +
+    '  <div class="stat-c"><div class="stat-v">' + totalViews + '</div><div class="stat-l">Consultations</div></div>' +
+    '  <div class="stat-c"><div class="stat-v">' + totalItems + '</div><div class="stat-l">Articles vus</div></div>' +
+    '  <div class="stat-c"><div class="stat-v">' + lastWeek + '</div><div class="stat-l">7 derniers jours</div></div>' +
+    '  <div class="stat-c"><div class="stat-v">' + lastMonth + '</div><div class="stat-l">30 derniers jours</div></div>' +
+    '  <div class="stat-c"><div class="stat-v">' + totalFavs + '</div><div class="stat-l">Favoris</div></div>' +
+    '  <div class="stat-c"><div class="stat-v">' + totalTags + '</div><div class="stat-l">Articles tagg&eacute;s</div></div>' +
+    '  <div class="stat-c"><div class="stat-v">' + totalNotes + '</div><div class="stat-l">Articles annot&eacute;s</div></div>' +
+    '</div>';
+
+  if (sorted.length) {
+    content += '<div style="font-family:Syne,sans-serif;font-size:14px;font-weight:700;margin-top:20px;margin-bottom:8px">Top des articles consult&eacute;s</div>';
+    content += '<div class="stat-list">' + topHtml + '</div>';
+  }
+
+  document.getElementById('v2-stats-content').innerHTML = content;
+  m.classList.add('show');
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// EXPORT CSV / PDF
+// ═══════════════════════════════════════════════════════════════════
+function getCurrentItems() {
+  // Récupère les items actuellement filtrés et affichés
+  if (S.allItems && Array.isArray(S.allItems)) return S.allItems;
+  return [];
+}
+function exportToCSV() {
+  var items = getCurrentItems();
+  if (!items.length) { alert('Aucun \u00e9l\u00e9ment \u00e0 exporter.'); return; }
+  var rows = [['Nom', 'Rubrique', 'Sous-rubrique', 'Date', 'Taille', 'Lien', 'Tags', 'Note']];
+  items.forEach(function(a){
+    rows.push([
+      a.name || '',
+      a.rubrique || '',
+      a.sousRub || '',
+      a.date || '',
+      a.size || '',
+      a.link || '',
+      getTags(a.id).join(' | '),
+      getNote(a.id).replace(/\n/g, ' ')
+    ]);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){
+    var s = String(c).replace(/"/g, '""');
+    return '"' + s + '"';
+  }).join(','); }).join('\n');
+  var blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'bibliotheque_export_' + new Date().toISOString().slice(0, 10) + '.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function openExportMenu() {
+  var choice = confirm('Choisir le format :\n\nOK = CSV (Excel)\nAnnuler = HTML (imprimable en PDF)');
+  if (choice) exportToCSV();
+  else exportToHTML();
+}
+function exportToHTML() {
+  var items = getCurrentItems();
+  if (!items.length) { alert('Aucun \u00e9l\u00e9ment \u00e0 exporter.'); return; }
+  var html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Export Biblioth&egrave;que</title>' +
+    '<style>body{font-family:sans-serif;padding:30px;color:#1a1a2e}h1{font-size:22px;border-bottom:2px solid #0f3460;padding-bottom:10px}' +
+    'table{width:100%;border-collapse:collapse;margin-top:20px;font-size:12px}' +
+    'th{background:#0f3460;color:#fff;padding:8px;text-align:left}' +
+    'td{padding:6px 8px;border-bottom:1px solid #eee}tr:hover{background:#f5f5f5}.t{font-size:10px;color:#666}</style>' +
+    '</head><body>' +
+    '<h1>Biblioth&egrave;que Scientifique &mdash; ' + items.length + ' &eacute;l&eacute;ments</h1>' +
+    '<p class="t">Export du ' + new Date().toLocaleString('fr-FR') + '</p>' +
+    '<table><thead><tr><th>Nom</th><th>Rubrique</th><th>Date</th><th>Taille</th><th>Tags</th></tr></thead><tbody>';
+  items.forEach(function(a){
+    html += '<tr><td>' + esc(a.name || '') + '</td><td>' + esc(a.rubrique || '') + '</td>' +
+      '<td>' + esc(a.date || '') + '</td><td>' + esc(a.size || '') + '</td>' +
+      '<td>' + esc(getTags(a.id).join(', ')) + '</td></tr>';
+  });
+  html += '</tbody></table></body></html>';
+  var blob = new Blob([html], { type: 'text/html' });
+  var url = URL.createObjectURL(blob);
+  var w = window.open(url, '_blank');
+  if (w) {
+    setTimeout(function(){ try { w.print(); } catch(e) {} }, 800);
+  } else {
+    var a = document.createElement('a');
+    a.href = url; a.download = 'bibliotheque_export.html';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  }
+  URL.revokeObjectURL(url);
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// COLLECTIONS THÉMATIQUES
+// ═══════════════════════════════════════════════════════════════════
+function getCollections() { return UD.collections || []; }
+function createCollection(name) {
+  if (!UD.collections) UD.collections = [];
+  var id = 'coll_' + Date.now();
+  UD.collections.push({ id: id, name: name, items: [] });
+  udMarkDirty();
+  return id;
+}
+function deleteCollection(id) {
+  if (!UD.collections) return;
+  UD.collections = UD.collections.filter(function(c){ return c.id !== id; });
+  udMarkDirty();
+}
+function addItemToCollection(collId, itemId) {
+  var c = (UD.collections || []).find(function(c){ return c.id === collId; });
+  if (!c) return;
+  if (!c.items) c.items = [];
+  if (c.items.indexOf(itemId) === -1) {
+    c.items.push(itemId);
+    udMarkDirty();
+  }
+}
+function removeItemFromCollection(collId, itemId) {
+  var c = (UD.collections || []).find(function(c){ return c.id === collId; });
+  if (!c || !c.items) return;
+  c.items = c.items.filter(function(i){ return i !== itemId; });
+  udMarkDirty();
+}
+function isInCollection(collId, itemId) {
+  var c = (UD.collections || []).find(function(c){ return c.id === collId; });
+  return c && c.items && c.items.indexOf(itemId) !== -1;
+}
+
+function openCollectionsModal() {
+  var m = document.getElementById('v2-modal-collections');
+  if (!m) return;
+  renderCollectionsModal();
+  m.classList.add('show');
+}
+function renderCollectionsModal() {
+  var colls = getCollections();
+  var html = '';
+  if (!colls.length) {
+    html = '<div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Aucune collection. Cr&eacute;ez-en une pour grouper vos articles.</div>';
+  } else {
+    html = '<div class="coll-list">';
+    colls.forEach(function(c){
+      html += '<div class="coll-c" onclick="openCollection(\'' + c.id + '\')">' +
+        '<button class="coll-c-rm" onclick="event.stopPropagation();confirmDeleteCollection(\'' + c.id + '\')" title="Supprimer">\u00d7</button>' +
+        '<div class="coll-c-name">' + esc(c.name) + '</div>' +
+        '<div class="coll-c-count">' + (c.items || []).length + ' &eacute;l&eacute;ment(s)</div>' +
+        '</div>';
+    });
+    html += '</div>';
+  }
+  document.getElementById('v2-collections-list').innerHTML = html;
+}
+function createCollectionFromInput() {
+  var inp = document.getElementById('v2-coll-input');
+  var name = inp.value.trim();
+  if (!name) return;
+  createCollection(name);
+  inp.value = '';
+  renderCollectionsModal();
+}
+function confirmDeleteCollection(id) {
+  if (confirm('Supprimer cette collection ?')) {
+    deleteCollection(id);
+    renderCollectionsModal();
+  }
+}
+function openCollection(id) {
+  var c = (UD.collections || []).find(function(c){ return c.id === id; });
+  if (!c) return;
+  var items = (S.allItems || []).filter(function(a){ return c.items && c.items.indexOf(a.id) !== -1; });
+  alert('Collection "' + c.name + '" : ' + items.length + ' article(s).\n\nNote : la vue d&eacute;taill&eacute;e des collections sera disponible dans une prochaine version.');
+  // TODO V2.1 : afficher les items de la collection dans la vue principale
+}
+function openAddToCollectionModal(item) {
+  var colls = getCollections();
+  if (!colls.length) {
+    if (confirm('Aucune collection. Voulez-vous en cr&eacute;er une maintenant ?')) {
+      var name = prompt('Nom de la collection :');
+      if (name) {
+        var newId = createCollection(name);
+        addItemToCollection(newId, item.id);
+        alert('Article ajout&eacute; \u00e0 "' + name + '"');
+        refreshItemActsButtons(item.id);
+      }
+    }
+    return;
+  }
+  // Choix multi via prompt simple
+  var menu = colls.map(function(c, i){
+    var inIt = isInCollection(c.id, item.id) ? '\u2611' : '\u2610';
+    return (i + 1) + '. ' + inIt + ' ' + c.name;
+  }).join('\n');
+  var input = prompt('Tapez le num&eacute;ro pour ajouter/retirer (ou "+" pour cr&eacute;er) :\n\n' + menu, '');
+  if (input === null) return;
+  if (input === '+') {
+    var nm = prompt('Nom de la nouvelle collection :');
+    if (nm) {
+      var nid = createCollection(nm);
+      addItemToCollection(nid, item.id);
+      refreshItemActsButtons(item.id);
+    }
+    return;
+  }
+  var idx = parseInt(input, 10) - 1;
+  if (idx >= 0 && idx < colls.length) {
+    if (isInCollection(colls[idx].id, item.id)) removeItemFromCollection(colls[idx].id, item.id);
+    else addItemToCollection(colls[idx].id, item.id);
+    refreshItemActsButtons(item.id);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// RECHERCHE VOCALE (Web Speech API)
+// ═══════════════════════════════════════════════════════════════════
+var _voiceRecog = null;
+function toggleVoiceSearch() {
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    alert('La reconnaissance vocale n\'est pas support&eacute;e par ce navigateur.');
+    return;
+  }
+  var btn = document.getElementById('btn-voice');
+  if (_voiceRecog) {
+    try { _voiceRecog.stop(); } catch(e) {}
+    _voiceRecog = null;
+    if (btn) btn.classList.remove('recording');
+    return;
+  }
+  _voiceRecog = new SR();
+  _voiceRecog.lang = 'fr-FR';
+  _voiceRecog.continuous = false;
+  _voiceRecog.interimResults = false;
+  if (btn) btn.classList.add('recording');
+  _voiceRecog.onresult = function(e) {
+    var t = e.results[0][0].transcript;
+    var inp = document.getElementById('srch-inp');
+    if (inp) {
+      inp.value = t;
+      onSearch(t);
+    }
+  };
+  _voiceRecog.onerror = function(e) { console.warn('voice error:', e); };
+  _voiceRecog.onend = function() {
+    _voiceRecog = null;
+    if (btn) btn.classList.remove('recording');
+  };
+  _voiceRecog.start();
+}
+
+// ═══════════════════════════════════════════════════════════════════
+// HELPERS UI - Boutons d'actions sur cartes (tags / note / collection)
+// ═══════════════════════════════════════════════════════════════════
+function refreshItemActsButtons(itemId) {
+  var has = {
+    tags: getTags(itemId).length > 0,
+    note: getNote(itemId).length > 0,
+    coll: (UD.collections || []).some(function(c){ return (c.items || []).indexOf(itemId) !== -1; })
+  };
+  document.querySelectorAll('[data-act-id="' + itemId + '"]').forEach(function(el){
+    var t = el.dataset.actType;
+    if (has[t]) el.classList.add('has-data');
+    else el.classList.remove('has-data');
+  });
+}
+function getItemForActions(itemId) {
+  if (S.allItems) {
+    var found = S.allItems.find(function(a){ return a.id === itemId; });
+    if (found) return found;
+  }
+  return { id: itemId, name: itemId };
+}
+function actClick(act, itemId, event) {
+  if (event) { event.stopPropagation(); event.preventDefault(); }
+  var it = getItemForActions(itemId);
+  if (act === 'tags') openTagsModal(it);
+  else if (act === 'note') openNoteModal(it);
+  else if (act === 'coll') openAddToCollectionModal(it);
+  return false;
+}
+function closeV2Modal(id) {
+  var m = document.getElementById(id);
+  if (m) m.classList.remove('show');
+}
+
+// Hook pour enregistrer la consultation lors d'un clic sur un article
+// (on intercepte la délégation existante)
+(function hookViewTracking(){
+  document.addEventListener('click', function(e){
+    var card = e.target.closest('[data-regkey]');
+    if (!card) return;
+    var k = card.dataset.regkey;
+    if (typeof regGet === 'function') {
+      var d = regGet(k);
+      if (d && d.item && d.item.id) recordView(d.item.id);
+    }
+  }, true);
+})();
+
+
+// ═══════════════════════════════════════════════════════════
+// DÉCONNEXION COMPLÈTE ("nucléaire") pour PC publics (Vague 1)
+// ═══════════════════════════════════════════════════════════
 function signOut() {
-  clearSession();
-  try { var t = gapi.client.getToken(); if (t) google.accounts.oauth2.revoke(t.access_token, function(){}); gapi.client.setToken(null); } catch(e) {}
+  // 1) Révoquer le token Google
+  try {
+    var t = gapi && gapi.client && gapi.client.getToken && gapi.client.getToken();
+    if (t && t.access_token) {
+      google.accounts.oauth2.revoke(t.access_token, function(){});
+    }
+    if (gapi && gapi.client && gapi.client.setToken) gapi.client.setToken(null);
+  } catch(e) {}
+
+  // 2) Désactiver l'auto-select Google (sinon reconnecte auto au prochain chargement)
+  try { google.accounts.id.disableAutoSelect(); } catch(e) {}
+
+  // 3) Nettoyer tout le localStorage lié à l'app
+  try {
+    var toRemove = [];
+    for (var i = 0; i < localStorage.length; i++) {
+      var k = localStorage.key(i);
+      if (k && (k.indexOf('bib') === 0 || k === SESS_KEY)) {
+        toRemove.push(k);
+      }
+    }
+    toRemove.forEach(function(k){ try { localStorage.removeItem(k); } catch(e) {} });
+  } catch(e) {}
+
+  // 4) Nettoyer sessionStorage
+  try { sessionStorage.clear(); } catch(e) {}
+
+  // 5) Effacer les cookies de l'origine
+  try {
+    document.cookie.split(';').forEach(function(c){
+      var name = c.split('=')[0].trim();
+      if(name){
+        document.cookie = name + '=; Path=/; Max-Age=0';
+        document.cookie = name + '=; Path=/; Max-Age=0; SameSite=Lax';
+      }
+    });
+  } catch(e) {}
+
+  // 6) Stopper le timer d'inactivité
+  try { clearTimeout(_inactTimer); var w = document.getElementById('inact-warn'); if(w) w.style.display = 'none'; } catch(e) {}
+
+  // 7) Reload complet (perd tout état en mémoire)
   location.reload();
 }
 
@@ -621,6 +1648,10 @@ document.addEventListener('DOMContentLoaded', function() {
   el('t-logo').addEventListener('click', goHome);
   el('t-title').addEventListener('click', goHome);
   el('btn-signout').addEventListener('click', signOut);
+  var btnT = el('btn-theme'); if(btnT) btnT.addEventListener('click', toggleTheme);
+  var btnS = el('btn-stats'); if(btnS) btnS.addEventListener('click', openStatsModal);
+  var btnC = el('btn-collections'); if(btnC) btnC.addEventListener('click', openCollectionsModal);
+  var btnE = el('btn-export'); if(btnE) btnE.addEventListener('click', openExportMenu);
   el('btn-refresh').addEventListener('click', doRefresh);
   el('btn-signin').addEventListener('click', initAuth);
   el('btn-demo').addEventListener('click', loadDemo);
@@ -1138,8 +2169,22 @@ function getFiltered() {
     items = S.curRub === 'all' ? S.allItems : (S.rubMap[S.curRub] ? S.rubMap[S.curRub].articles : []);
   }
   if (S.curSearch) {
-    var q = S.curSearch.toLowerCase();
-    items = items.filter(function(a) { return a.name.toLowerCase().indexOf(q) !== -1 || a.rubrique.toLowerCase().indexOf(q) !== -1; });
+    // Recherche enrichie : tokenise les mots et cherche dans name, rubrique, sousRub, date
+    var qTokens = S.curSearch.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    items = items.filter(function(a) {
+      var hay = [
+        (a.name || '').toLowerCase(),
+        (a.rubrique || '').toLowerCase(),
+        (a.sousRub || '').toLowerCase(),
+        (a.date || '').toLowerCase()
+      ].join(' | ');
+      // Tous les mots doivent être trouvés (AND)
+      return qTokens.every(function(t){ return hay.indexOf(t) !== -1; });
+    });
+  }
+  // Filtrer sur les favoris si actif
+  if (S.favOnly) {
+    items = items.filter(function(a) { return isFav(a.id); });
   }
   var s = el('sort-sel') ? el('sort-sel').value : 'name';
   return items.slice().sort(function(a, b) {
@@ -1179,7 +2224,17 @@ function renderItems() {
     h = '<div class="art-grid">';
     items.forEach(function(a, i) {
       var k = regSet({ type: 'article', link: a.link, isDemo: a.isDemo, item: a });
-      h += '<div class="acard" style="animation-delay:' + Math.min(i * 20, 300) + 'ms" data-regkey="' + k + '">' +
+      var hasTagV2 = (typeof getTags === 'function') && getTags(a.id).length > 0;
+      var hasNoteV2 = (typeof getNote === 'function') && getNote(a.id).length > 0;
+      var hasCollV2 = (typeof UD !== 'undefined' && UD.collections) && UD.collections.some(function(c){ return (c.items || []).indexOf(a.id) !== -1; });
+      h += '<div class="acard" style="animation-delay:' + Math.min(i * 20, 300) + 'ms;position:relative" data-regkey="' + k + '">' +
+        '<div class="item-acts">' +
+          '<button class="item-act-btn' + (hasTagV2 ? ' has-data' : '') + '" data-act-id="' + a.id + '" data-act-type="tags" onclick="return actClick(\'tags\',\'' + a.id + '\',event)" title="Tags">\uD83C\uDFF7</button>' +
+          '<button class="item-act-btn' + (hasNoteV2 ? ' has-data' : '') + '" data-act-id="' + a.id + '" data-act-type="note" onclick="return actClick(\'note\',\'' + a.id + '\',event)" title="Note">\uD83D\uDCDD</button>' +
+          '<button class="item-act-btn' + (hasCollV2 ? ' has-data' : '') + '" data-act-id="' + a.id + '" data-act-type="coll" onclick="return actClick(\'coll\',\'' + a.id + '\',event)" title="Collection">\uD83D\uDCC1</button>' +
+        '</div>' +
+        '<button class="fav-star item-fav-btn" data-fav-id="' + a.id + '" onclick="return toggleFav(\'' + a.id + '\', event)" title="Favori">' + (isFav(a.id) ? '\u2605' : '\u2606') + '</button>' +
+        '<button class="item-share-btn" onclick="event.stopPropagation();shareItem(' + JSON.stringify({id:a.id,name:a.name,rubrique:a.rubrique,link:a.link}).replace(/"/g,'&quot;') + ', event);return false" title="Partager">\uD83D\uDD17</button>' +
         thumbHtml(a) +
         '<div class="c-body">' +
         '<div class="c-rub tc' + a.colorIdx + '">' + esc(a.rubrique) + (a.sousRub ? ' &rsaquo; ' + esc(a.sousRub) : '') + '</div>' +
@@ -1193,11 +2248,12 @@ function renderItems() {
     items.forEach(function(a, i) {
       var k = regSet({ type: 'article', link: a.link, isDemo: a.isDemo, item: a });
       var rmeta = (S.curRub === '__rec__' && a.ts) ? timeAgo(a.ts) : a.date;
-      h += '<div class="arow" style="animation-delay:' + Math.min(i * 15, 300) + 'ms" data-regkey="' + k + '">' +
+      h += '<div class="arow" style="animation-delay:' + Math.min(i * 15, 300) + 'ms;position:relative" data-regkey="' + k + '">' +
+        '<button class="fav-star" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);font-size:16px" data-fav-id="' + a.id + '" onclick="return toggleFav(\'' + a.id + '\', event)" title="Favori">' + (isFav(a.id) ? '\u2605' : '\u2606') + '</button>' +
         '<div class="row-ico col' + a.colorIdx + '">' + CFG.icons[a.colorIdx] + '</div>' +
         '<div class="row-inf"><div class="row-title">' + hlText(a.name, q) + '</div>' +
         '<div class="row-meta"><span class="row-rub tc' + a.colorIdx + '">' + esc(a.rubrique) + '</span><span>' + rmeta + '</span><span>' + a.size + '</span></div></div>' +
-        '<span class="row-open">\u2197</span></div>';
+        '<span class="row-open" style="margin-right:28px">\u2197</span></div>';
     });
     h += '</div>';
   }
@@ -1387,5 +2443,63 @@ function renderVideoLevel(folders, videos, path) {
   htm('vcont', h);
 }
 </script>
+
+<!-- Warning déconnexion imminente -->
+<div id="inact-warn">
+  <div style="flex:1">
+    <div style="font-weight:700;font-size:.9rem;margin-bottom:4px">&#9888;&#65039; D&eacute;connexion imminente</div>
+    <div style="font-size:.8rem;opacity:.8">Inactif depuis 28 min &mdash; d&eacute;connexion dans 2 min</div>
+  </div>
+  <button onclick="_resetInact()">Je suis l&agrave;</button>
+</div>
+
+<!-- MODALES VAGUE 2 -->
+
+<!-- Modal Tags -->
+<div class="v2-modal" id="v2-modal-tags">
+  <div class="v2-modal-content">
+    <div class="v2-modal-h"><h3 id="v2-tags-title">Tags</h3><button class="v2-modal-close" onclick="closeV2Modal('v2-modal-tags')">&times;</button></div>
+    <input type="hidden" id="v2-tags-itemid">
+    <div id="v2-tags-list"></div>
+    <div style="display:flex;gap:8px;margin-top:14px">
+      <input type="text" id="v2-tags-input" class="tag-input" placeholder="Nouveau tag..." onkeydown="if(event.key==='Enter')addTagFromInput()">
+      <button class="v2-btn v2-btn-primary" onclick="addTagFromInput()">Ajouter</button>
+    </div>
+    <div id="v2-tags-suggestions"></div>
+  </div>
+</div>
+
+<!-- Modal Note -->
+<div class="v2-modal" id="v2-modal-note">
+  <div class="v2-modal-content">
+    <div class="v2-modal-h"><h3 id="v2-note-title">Note personnelle</h3><button class="v2-modal-close" onclick="closeV2Modal('v2-modal-note')">&times;</button></div>
+    <input type="hidden" id="v2-note-itemid">
+    <textarea id="v2-note-textarea" class="note-textarea" placeholder="Vos notes sur cet article..."></textarea>
+    <div style="display:flex;gap:8px;margin-top:14px;justify-content:flex-end">
+      <button class="v2-btn v2-btn-secondary" onclick="closeV2Modal('v2-modal-note')">Annuler</button>
+      <button class="v2-btn v2-btn-primary" onclick="saveNoteFromModal()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Stats -->
+<div class="v2-modal" id="v2-modal-stats">
+  <div class="v2-modal-content">
+    <div class="v2-modal-h"><h3>Statistiques de lecture</h3><button class="v2-modal-close" onclick="closeV2Modal('v2-modal-stats')">&times;</button></div>
+    <div id="v2-stats-content"></div>
+  </div>
+</div>
+
+<!-- Modal Collections -->
+<div class="v2-modal" id="v2-modal-collections">
+  <div class="v2-modal-content">
+    <div class="v2-modal-h"><h3>Mes collections th&eacute;matiques</h3><button class="v2-modal-close" onclick="closeV2Modal('v2-modal-collections')">&times;</button></div>
+    <div style="display:flex;gap:8px;margin-bottom:14px">
+      <input type="text" id="v2-coll-input" class="tag-input" placeholder="Nom de la nouvelle collection..." onkeydown="if(event.key==='Enter')createCollectionFromInput()" style="margin-top:0">
+      <button class="v2-btn v2-btn-primary" onclick="createCollectionFromInput()">Cr&eacute;er</button>
+    </div>
+    <div id="v2-collections-list"></div>
+  </div>
+</div>
 </body>
 </html>
