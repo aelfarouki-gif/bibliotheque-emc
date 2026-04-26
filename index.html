@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Bibliotheque Scientifique - MAJ 24/04/2026 05:22 - Vague 1 : recherche + favoris + sombre + sécurité -->
+<!-- Bibliotheque Scientifique - MAJ 22/04/2026 16:46 - Cache Drive + scope email -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -14,84 +14,7 @@
   --paper:#f5f2eb;--cream:#faf8f3;--cream2:#f0ede6;
   --text1:#1a1a2e;--text2:#4a4a6a;--text3:#8888aa;
   --border:#e8e4dc;--shadow:0 2px 12px rgba(0,0,0,0.08);
-  --fav:#f59e0b;--fav-bg:rgba(245,158,11,.1);
 }
-body.dark-mode{
-  --paper:#1e293b;--cream:#0f172a;--cream2:#1e293b;
-  --text1:#f1f5f9;--text2:#cbd5e1;--text3:#64748b;
-  --border:#334155;--shadow:0 2px 12px rgba(0,0,0,0.35);
-}
-body.dark-mode .topbar{background:#020617 !important}
-body.dark-mode .c-thumb-book{background:linear-gradient(135deg,#334155,#1e293b)}
-body.dark-mode mark{background:#facc15;color:#0f172a}
-/* Cartes en mode sombre */
-body.dark-mode .hcard,
-body.dark-mode .ecard,
-body.dark-mode .acard,
-body.dark-mode .arow,
-body.dark-mode .fcard,
-body.dark-mode .vcard{background:#1e293b;color:var(--text1)}
-body.dark-mode .acard:hover,
-body.dark-mode .arow:hover,
-body.dark-mode .fcard:hover{background:#293548}
-/* Inputs / selects en mode sombre */
-body.dark-mode .sort-sel,
-body.dark-mode .sc-btn,
-body.dark-mode .view-btn.on{background:#1e293b;color:var(--text1);border-color:var(--border)}
-body.dark-mode .srch-inp{background:transparent;color:var(--text1)}
-body.dark-mode .srch-inp::placeholder{color:var(--text3)}
-body.dark-mode .srch-wrap{background:#1e293b}
-/* Body et écrans */
-body.dark-mode{background:var(--cream)}
-body.dark-mode .main-c{background:var(--cream)}
-body.dark-mode .login-card{background:#1e293b;color:var(--text1)}
-body.dark-mode .home-hero,
-body.dark-mode #screen-home,
-body.dark-mode #screen-browser,
-body.dark-mode #screen-ebook-home,
-body.dark-mode #screen-videos{background:var(--cream)}
-/* Sidebar */
-body.dark-mode .sidebar{background:#0b1424;border-color:var(--border);color:var(--text1)}
-body.dark-mode .rub-btn{color:var(--text2)}
-body.dark-mode .rub-btn:hover{background:#1e293b}
-body.dark-mode .rub-btn.active{background:#293548;color:var(--text1)}
-/* Footer / divers */
-body.dark-mode .topbar-r .u-chip{background:rgba(255,255,255,.08)}
-body.dark-mode .c-rub{opacity:.85}
-body.dark-mode .row-rub{opacity:.85}
-
-/* Favoris */
-.fav-star{cursor:pointer;font-size:18px;color:var(--text3);transition:all .15s;user-select:none;background:none;border:none;padding:4px}
-.fav-star:hover{color:var(--fav);transform:scale(1.15)}
-.fav-star.is-fav{color:var(--fav)}
-.item-c{position:relative}
-.item-fav-btn{position:absolute;top:8px;right:8px;z-index:5}
-
-/* Cache indicator */
-.cache-ind{font-size:11px;color:var(--text3);padding:4px 8px;cursor:pointer;user-select:none;font-family:monospace}
-.cache-ind:hover{color:var(--accent);text-decoration:underline}
-
-/* Dark mode toggle */
-.theme-toggle{background:none;border:1px solid rgba(255,255,255,.2);color:var(--paper);padding:6px 10px;border-radius:8px;cursor:pointer;font-size:13px;transition:all .15s}
-.theme-toggle:hover{background:rgba(255,255,255,.1)}
-
-/* Warning d'inactivité */
-#inact-warn{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;background:#0d1b2e;color:#fff;border-radius:12px;padding:16px 24px;box-shadow:0 8px 32px rgba(0,0,0,.5);align-items:center;gap:16px;min-width:380px;max-width:90vw}
-#inact-warn button{padding:8px 16px;border:none;border-radius:8px;background:#c8a96e;color:#0d1b2e;font-weight:700;cursor:pointer;white-space:nowrap;font-family:inherit}
-
-/* Share button */
-.item-share-btn{position:absolute;top:8px;right:40px;z-index:5;background:none;border:none;font-size:15px;cursor:pointer;color:var(--text3);opacity:0;transition:opacity .2s;padding:4px}
-.item-c:hover .item-share-btn{opacity:1}
-.item-share-btn:hover{color:var(--accent)}
-
-/* Recherche améliorée */
-.srch-hint{font-size:11px;color:var(--text3);margin-top:4px;padding:0 8px}
-.srch-fulltext-btn{margin-left:8px;padding:4px 10px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-size:12px;cursor:pointer}
-.srch-fulltext-btn:hover{opacity:.9}
-.srch-fulltext-btn.loading{opacity:.6;cursor:wait}
-
-/* Filtre favoris */
-.filt-fav-active{background:var(--fav-bg);color:var(--fav);font-weight:700}
 html,body{height:100%;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text1)}
 .hidden{display:none!important}
 .spinner{width:28px;height:28px;border:3px solid rgba(0,0,0,0.1);border-top-color:var(--accent);border-radius:50%;animation:spin .7s linear infinite;margin:0 auto}
@@ -301,10 +224,8 @@ mark{background:#fef08a;border-radius:2px;padding:0 1px}
         <span class="u-name" id="u-name"></span>
       </div>
       <span class="sync-chip hidden" id="sync-chip"><span class="sync-dot"></span><span id="sync-msg">Synchronisation</span></span>
-      <span class="cache-ind hidden" id="cache-ind" title="Date du dernier rafra&icirc;chissement du cache">&#128230; -</span>
-      <button class="theme-toggle" id="btn-theme" title="Basculer mode sombre/clair">&#127769;</button>
       <button class="btn-top hidden" id="btn-refresh">&#128260; Actualiser</button>
-      <button class="btn-top" id="btn-signout" title="D&eacute;connexion compl&egrave;te (efface email, cookies, cache local)">Deconnexion</button>
+      <button class="btn-top" id="btn-signout">Deconnexion</button>
     </div>
   </div>
 </div>
@@ -396,7 +317,7 @@ mark{background:#fef08a;border-radius:2px;padding:0 1px}
       <div class="srch-bar">
         <div class="srch-wrap">
           <span style="font-size:14px;opacity:.4">&#128269;</span>
-          <input class="srch-inp" id="srch-inp" type="text" placeholder="Rechercher..."><button id="btn-drive-search" class="srch-fulltext-btn" onclick="searchDriveFullText()" title="Rechercher dans le contenu des PDF via Google Drive">🔍 Contenu PDF</button><button id="filt-fav" class="srch-fulltext-btn" onclick="toggleFavOnly()" style="background:transparent;border:1px solid var(--border);color:var(--text2);margin-left:6px" title="Afficher uniquement les favoris">☆</button>
+          <input class="srch-inp" id="srch-inp" type="text" placeholder="Rechercher...">
         </div>
         <div class="scope-btns">
           <button class="sc-btn on" id="sc-title" data-scope="title">Titre</button>
@@ -634,251 +555,9 @@ function onSignedIn() {
   });
 }
 
-// ═══════════════════════════════════════════════════════════
-// FAVORIS (Vague 1)
-// ═══════════════════════════════════════════════════════════
-var FAV_KEY = 'bib_favs';
-function loadFavs(){ try { return JSON.parse(localStorage.getItem(FAV_KEY) || '[]'); } catch(e){ return []; } }
-function saveFavs(arr){ try { localStorage.setItem(FAV_KEY, JSON.stringify(arr)); } catch(e){} }
-function isFav(id){ return loadFavs().indexOf(id) !== -1; }
-function toggleFav(id, event){
-  if(event) { event.stopPropagation(); event.preventDefault(); }
-  var favs = loadFavs();
-  var idx = favs.indexOf(id);
-  if(idx !== -1) favs.splice(idx, 1);
-  else favs.unshift(id);
-  saveFavs(favs);
-  // Re-render du bouton sur la carte
-  var btn = document.querySelector('[data-fav-id="' + id + '"]');
-  if(btn){
-    if(isFav(id)){ btn.classList.add('is-fav'); btn.textContent = '\u2605'; }
-    else{ btn.classList.remove('is-fav'); btn.textContent = '\u2606'; }
-  }
-  return false;
-}
-function toggleFavOnly(){
-  S.favOnly = !S.favOnly;
-  var btn = document.getElementById('filt-fav');
-  if(btn) btn.classList.toggle('filt-fav-active', S.favOnly);
-  if(typeof renderItems === 'function') renderItems();
-}
-
-// ═══════════════════════════════════════════════════════════
-// MODE SOMBRE (Vague 1)
-// ═══════════════════════════════════════════════════════════
-var THEME_KEY = 'bib_theme';
-function applyTheme(t){
-  if(t === 'dark') document.body.classList.add('dark-mode');
-  else document.body.classList.remove('dark-mode');
-  var btn = document.getElementById('btn-theme');
-  if(btn) btn.innerHTML = t === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
-}
-function toggleTheme(){
-  var cur = localStorage.getItem(THEME_KEY) || 'light';
-  var next = cur === 'dark' ? 'light' : 'dark';
-  try { localStorage.setItem(THEME_KEY, next); } catch(e){}
-  applyTheme(next);
-}
-// Appliquer le thème au chargement (avant rendu visible)
-(function(){ try { applyTheme(localStorage.getItem(THEME_KEY) || 'light'); } catch(e){} })();
-
-// ═══════════════════════════════════════════════════════════
-// INDICATEUR DE CACHE (Vague 1)
-// ═══════════════════════════════════════════════════════════
-function updateCacheIndicator(){
-  var el = document.getElementById('cache-ind');
-  if(!el) return;
-  // Chercher la dernière date de fetch stockée
-  var ts = 0;
-  try {
-    for(var i = 0; i < localStorage.length; i++){
-      var k = localStorage.key(i);
-      if(k && k.indexOf('bib_cache_ts_') === 0){
-        var v = parseInt(localStorage.getItem(k) || '0', 10);
-        if(v > ts) ts = v;
-      }
-    }
-  } catch(e){}
-  if(!ts){ el.classList.add('hidden'); return; }
-  el.classList.remove('hidden');
-  el.innerHTML = '\uD83D\uDCE6 ' + timeAgo(ts);
-}
-function markCacheUpdated(section){
-  try { localStorage.setItem('bib_cache_ts_' + section, String(Date.now())); } catch(e){}
-  updateCacheIndicator();
-}
-setInterval(updateCacheIndicator, 60000); // Refresh chaque minute
-
-// ═══════════════════════════════════════════════════════════
-// PARTAGE DE LIEN (Vague 1)
-// ═══════════════════════════════════════════════════════════
-function shareItem(item, event){
-  if(event) { event.stopPropagation(); event.preventDefault(); }
-  var text = item.name + (item.rubrique ? ' - ' + item.rubrique : '');
-  var link = item.link || '';
-  if(navigator.share){
-    // API Web Share (mobile surtout)
-    navigator.share({ title: item.name, text: text, url: link }).catch(function(){});
-  } else {
-    // Fallback : copier dans le presse-papiers
-    var toCopy = text + '\n' + link;
-    try {
-      navigator.clipboard.writeText(toCopy).then(function(){
-        alert('\u2714 Lien copi\u00e9 dans le presse-papiers');
-      });
-    } catch(e){
-      prompt('Copiez le lien :', toCopy);
-    }
-  }
-  return false;
-}
-
-// ═══════════════════════════════════════════════════════════
-// RECHERCHE FULL-TEXT GOOGLE DRIVE (Vague 1 - Niveau 2)
-// ═══════════════════════════════════════════════════════════
-async function searchDriveFullText(){
-  var inp = document.getElementById('srch-inp');
-  if(!inp || !inp.value.trim()){ alert('Entrez un terme de recherche.'); return; }
-  var q = inp.value.trim();
-  var btn = document.getElementById('btn-drive-search');
-  if(btn){ btn.classList.add('loading'); btn.textContent = 'Recherche...'; }
-  try {
-    // Détermination du folder à chercher selon la section
-    var folderId = null;
-    if(S.section === 'articles') folderId = CFG.folderEMC;
-    else if(S.section === 'ebook-fr') folderId = CFG.folderFR;
-    else if(S.section === 'ebook-en') folderId = CFG.folderEN;
-
-    var query = "fullText contains '" + q.replace(/'/g, "\\'") + "' and trashed=false";
-    // Restreindre au folder si possible (via parents en recursif)
-    // Note : Drive ne supporte pas récursif direct, donc on filtre par mimeType PDF
-    query += " and mimeType='application/pdf'";
-
-    var res = await gapi.client.drive.files.list({
-      q: query,
-      fields: 'files(id,name,size,modifiedTime,webViewLink,parents)',
-      pageSize: 100,
-      orderBy: 'modifiedTime desc'
-    });
-    var files = (res.result && res.result.files) || [];
-
-    if(btn){ btn.classList.remove('loading'); btn.innerHTML = '\uD83D\uDD0D Contenu PDF'; }
-
-    if(!files.length){
-      alert('Aucun document ne contient "' + q + '" dans son contenu.');
-      return;
-    }
-
-    // Afficher les résultats dans l'UI principale
-    var cont = document.getElementById('art-cont');
-    if(!cont){ alert(files.length + ' r\u00e9sultat(s) trouv\u00e9(s).'); return; }
-
-    var html = '<div style="padding:16px 20px 8px;color:var(--text2);font-size:13px">'
-      + '\uD83D\uDD0D ' + files.length + ' document(s) contenant "' + esc(q) + '" dans leur contenu PDF '
-      + '<button onclick="onSearch(\'\');renderItems()" style="margin-left:10px;padding:4px 10px;background:var(--accent);color:#fff;border:none;border-radius:6px;cursor:pointer;font-size:12px">Retour</button>'
-      + '</div><div class="item-grid" style="padding:16px 20px">';
-    files.forEach(function(f){
-      var link = f.webViewLink || ('https://drive.google.com/file/d/' + f.id + '/view');
-      html += '<div class="item-c" onclick="window.open(\'' + esc(link) + '\',\'_blank\')" style="cursor:pointer">'
-        + '<div class="c-thumb-book"><div class="book-spine"></div><span class="thumb-ph">\uD83D\uDCD6</span></div>'
-        + '<div class="item-n" style="font-weight:600;font-size:13px;margin-top:8px">' + esc(f.name) + '</div>'
-        + '<div class="item-m" style="font-size:11px;color:var(--text3);margin-top:4px">' + fmtSize(parseInt(f.size||'0',10)) + '</div>'
-        + '</div>';
-    });
-    html += '</div>';
-    cont.innerHTML = html;
-  } catch(e){
-    if(btn){ btn.classList.remove('loading'); btn.innerHTML = '\uD83D\uDD0D Contenu PDF'; }
-    alert('Erreur : ' + (e.message || e));
-  }
-}
-
-// ═══════════════════════════════════════════════════════════
-// DÉCONNEXION AUTO PAR INACTIVITÉ (Vague 1)
-// ═══════════════════════════════════════════════════════════
-var _inactTimer = null;
-function _resetInact(){
-  // Ne tourne que si user connecté
-  var tb = document.getElementById('topbar');
-  if(!tb || tb.classList.contains('hidden')) return;
-  clearTimeout(_inactTimer);
-  var w = document.getElementById('inact-warn'); if(w) w.style.display = 'none';
-  _inactTimer = setTimeout(function(){
-    var w = document.getElementById('inact-warn'); if(w) w.style.display = 'flex';
-    _inactTimer = setTimeout(function(){
-      var w = document.getElementById('inact-warn'); if(w) w.style.display = 'none';
-      signOut(); // Déclenche la déconnexion complète
-    }, 2 * 60 * 1000);
-  }, 28 * 60 * 1000);
-}
-['mousedown','keydown','touchstart','scroll','click'].forEach(function(ev){
-  document.addEventListener(ev, _resetInact, { passive: true });
-});
-
-// ═══════════════════════════════════════════════════════════
-// RACCOURCI CLAVIER "/" POUR FOCUS RECHERCHE (Vague 1)
-// ═══════════════════════════════════════════════════════════
-document.addEventListener('keydown', function(e){
-  if(e.key === '/' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA'){
-    var inp = document.getElementById('srch-inp');
-    if(inp){ e.preventDefault(); inp.focus(); inp.select(); }
-  }
-  if(e.key === 'Escape'){
-    var inp = document.getElementById('srch-inp');
-    if(inp && document.activeElement === inp){
-      inp.value = '';
-      onSearch('');
-      inp.blur();
-    }
-  }
-});
-
-// ═══════════════════════════════════════════════════════════
-// DÉCONNEXION COMPLÈTE ("nucléaire") pour PC publics (Vague 1)
-// ═══════════════════════════════════════════════════════════
 function signOut() {
-  // 1) Révoquer le token Google
-  try {
-    var t = gapi && gapi.client && gapi.client.getToken && gapi.client.getToken();
-    if (t && t.access_token) {
-      google.accounts.oauth2.revoke(t.access_token, function(){});
-    }
-    if (gapi && gapi.client && gapi.client.setToken) gapi.client.setToken(null);
-  } catch(e) {}
-
-  // 2) Désactiver l'auto-select Google (sinon reconnecte auto au prochain chargement)
-  try { google.accounts.id.disableAutoSelect(); } catch(e) {}
-
-  // 3) Nettoyer tout le localStorage lié à l'app
-  try {
-    var toRemove = [];
-    for (var i = 0; i < localStorage.length; i++) {
-      var k = localStorage.key(i);
-      if (k && (k.indexOf('bib') === 0 || k === SESS_KEY)) {
-        toRemove.push(k);
-      }
-    }
-    toRemove.forEach(function(k){ try { localStorage.removeItem(k); } catch(e) {} });
-  } catch(e) {}
-
-  // 4) Nettoyer sessionStorage
-  try { sessionStorage.clear(); } catch(e) {}
-
-  // 5) Effacer les cookies de l'origine
-  try {
-    document.cookie.split(';').forEach(function(c){
-      var name = c.split('=')[0].trim();
-      if(name){
-        document.cookie = name + '=; Path=/; Max-Age=0';
-        document.cookie = name + '=; Path=/; Max-Age=0; SameSite=Lax';
-      }
-    });
-  } catch(e) {}
-
-  // 6) Stopper le timer d'inactivité
-  try { clearTimeout(_inactTimer); var w = document.getElementById('inact-warn'); if(w) w.style.display = 'none'; } catch(e) {}
-
-  // 7) Reload complet (perd tout état en mémoire)
+  clearSession();
+  try { var t = gapi.client.getToken(); if (t) google.accounts.oauth2.revoke(t.access_token, function(){}); gapi.client.setToken(null); } catch(e) {}
   location.reload();
 }
 
@@ -942,7 +621,6 @@ document.addEventListener('DOMContentLoaded', function() {
   el('t-logo').addEventListener('click', goHome);
   el('t-title').addEventListener('click', goHome);
   el('btn-signout').addEventListener('click', signOut);
-  var btnT = el('btn-theme'); if(btnT) btnT.addEventListener('click', toggleTheme);
   el('btn-refresh').addEventListener('click', doRefresh);
   el('btn-signin').addEventListener('click', initAuth);
   el('btn-demo').addEventListener('click', loadDemo);
@@ -1460,22 +1138,8 @@ function getFiltered() {
     items = S.curRub === 'all' ? S.allItems : (S.rubMap[S.curRub] ? S.rubMap[S.curRub].articles : []);
   }
   if (S.curSearch) {
-    // Recherche enrichie : tokenise les mots et cherche dans name, rubrique, sousRub, date
-    var qTokens = S.curSearch.toLowerCase().trim().split(/\s+/).filter(Boolean);
-    items = items.filter(function(a) {
-      var hay = [
-        (a.name || '').toLowerCase(),
-        (a.rubrique || '').toLowerCase(),
-        (a.sousRub || '').toLowerCase(),
-        (a.date || '').toLowerCase()
-      ].join(' | ');
-      // Tous les mots doivent être trouvés (AND)
-      return qTokens.every(function(t){ return hay.indexOf(t) !== -1; });
-    });
-  }
-  // Filtrer sur les favoris si actif
-  if (S.favOnly) {
-    items = items.filter(function(a) { return isFav(a.id); });
+    var q = S.curSearch.toLowerCase();
+    items = items.filter(function(a) { return a.name.toLowerCase().indexOf(q) !== -1 || a.rubrique.toLowerCase().indexOf(q) !== -1; });
   }
   var s = el('sort-sel') ? el('sort-sel').value : 'name';
   return items.slice().sort(function(a, b) {
@@ -1515,9 +1179,7 @@ function renderItems() {
     h = '<div class="art-grid">';
     items.forEach(function(a, i) {
       var k = regSet({ type: 'article', link: a.link, isDemo: a.isDemo, item: a });
-      h += '<div class="acard" style="animation-delay:' + Math.min(i * 20, 300) + 'ms;position:relative" data-regkey="' + k + '">' +
-        '<button class="fav-star item-fav-btn" data-fav-id="' + a.id + '" onclick="return toggleFav(\'' + a.id + '\', event)" title="Favori">' + (isFav(a.id) ? '\u2605' : '\u2606') + '</button>' +
-        '<button class="item-share-btn" onclick="event.stopPropagation();shareItem(' + JSON.stringify({id:a.id,name:a.name,rubrique:a.rubrique,link:a.link}).replace(/"/g,'&quot;') + ', event);return false" title="Partager">\uD83D\uDD17</button>' +
+      h += '<div class="acard" style="animation-delay:' + Math.min(i * 20, 300) + 'ms" data-regkey="' + k + '">' +
         thumbHtml(a) +
         '<div class="c-body">' +
         '<div class="c-rub tc' + a.colorIdx + '">' + esc(a.rubrique) + (a.sousRub ? ' &rsaquo; ' + esc(a.sousRub) : '') + '</div>' +
@@ -1531,12 +1193,11 @@ function renderItems() {
     items.forEach(function(a, i) {
       var k = regSet({ type: 'article', link: a.link, isDemo: a.isDemo, item: a });
       var rmeta = (S.curRub === '__rec__' && a.ts) ? timeAgo(a.ts) : a.date;
-      h += '<div class="arow" style="animation-delay:' + Math.min(i * 15, 300) + 'ms;position:relative" data-regkey="' + k + '">' +
-        '<button class="fav-star" style="position:absolute;top:50%;right:14px;transform:translateY(-50%);font-size:16px" data-fav-id="' + a.id + '" onclick="return toggleFav(\'' + a.id + '\', event)" title="Favori">' + (isFav(a.id) ? '\u2605' : '\u2606') + '</button>' +
+      h += '<div class="arow" style="animation-delay:' + Math.min(i * 15, 300) + 'ms" data-regkey="' + k + '">' +
         '<div class="row-ico col' + a.colorIdx + '">' + CFG.icons[a.colorIdx] + '</div>' +
         '<div class="row-inf"><div class="row-title">' + hlText(a.name, q) + '</div>' +
         '<div class="row-meta"><span class="row-rub tc' + a.colorIdx + '">' + esc(a.rubrique) + '</span><span>' + rmeta + '</span><span>' + a.size + '</span></div></div>' +
-        '<span class="row-open" style="margin-right:28px">\u2197</span></div>';
+        '<span class="row-open">\u2197</span></div>';
     });
     h += '</div>';
   }
@@ -1726,14 +1387,5 @@ function renderVideoLevel(folders, videos, path) {
   htm('vcont', h);
 }
 </script>
-
-<!-- Warning déconnexion imminente -->
-<div id="inact-warn">
-  <div style="flex:1">
-    <div style="font-weight:700;font-size:.9rem;margin-bottom:4px">&#9888;&#65039; D&eacute;connexion imminente</div>
-    <div style="font-size:.8rem;opacity:.8">Inactif depuis 28 min &mdash; d&eacute;connexion dans 2 min</div>
-  </div>
-  <button onclick="_resetInact()">Je suis l&agrave;</button>
-</div>
 </body>
 </html>
