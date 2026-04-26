@@ -24,6 +24,41 @@ body.dark-mode{
 body.dark-mode .topbar{background:#020617 !important}
 body.dark-mode .c-thumb-book{background:linear-gradient(135deg,#334155,#1e293b)}
 body.dark-mode mark{background:#facc15;color:#0f172a}
+/* Cartes en mode sombre */
+body.dark-mode .hcard,
+body.dark-mode .ecard,
+body.dark-mode .acard,
+body.dark-mode .arow,
+body.dark-mode .fcard,
+body.dark-mode .vcard{background:#1e293b;color:var(--text1)}
+body.dark-mode .acard:hover,
+body.dark-mode .arow:hover,
+body.dark-mode .fcard:hover{background:#293548}
+/* Inputs / selects en mode sombre */
+body.dark-mode .sort-sel,
+body.dark-mode .sc-btn,
+body.dark-mode .view-btn.on{background:#1e293b;color:var(--text1);border-color:var(--border)}
+body.dark-mode .srch-inp{background:transparent;color:var(--text1)}
+body.dark-mode .srch-inp::placeholder{color:var(--text3)}
+body.dark-mode .srch-wrap{background:#1e293b}
+/* Body et écrans */
+body.dark-mode{background:var(--cream)}
+body.dark-mode .main-c{background:var(--cream)}
+body.dark-mode .login-card{background:#1e293b;color:var(--text1)}
+body.dark-mode .home-hero,
+body.dark-mode #screen-home,
+body.dark-mode #screen-browser,
+body.dark-mode #screen-ebook-home,
+body.dark-mode #screen-videos{background:var(--cream)}
+/* Sidebar */
+body.dark-mode .sidebar{background:#0b1424;border-color:var(--border);color:var(--text1)}
+body.dark-mode .rub-btn{color:var(--text2)}
+body.dark-mode .rub-btn:hover{background:#1e293b}
+body.dark-mode .rub-btn.active{background:#293548;color:var(--text1)}
+/* Footer / divers */
+body.dark-mode .topbar-r .u-chip{background:rgba(255,255,255,.08)}
+body.dark-mode .c-rub{opacity:.85}
+body.dark-mode .row-rub{opacity:.85}
 
 /* Favoris */
 .fav-star{cursor:pointer;font-size:18px;color:var(--text3);transition:all .15s;user-select:none;background:none;border:none;padding:4px}
@@ -907,6 +942,7 @@ document.addEventListener('DOMContentLoaded', function() {
   el('t-logo').addEventListener('click', goHome);
   el('t-title').addEventListener('click', goHome);
   el('btn-signout').addEventListener('click', signOut);
+  var btnT = el('btn-theme'); if(btnT) btnT.addEventListener('click', toggleTheme);
   el('btn-refresh').addEventListener('click', doRefresh);
   el('btn-signin').addEventListener('click', initAuth);
   el('btn-demo').addEventListener('click', loadDemo);
