@@ -108,6 +108,7 @@ html,body{height:100%;font-family:'Inter',sans-serif;background:var(--cream);col
 .step{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--text2)}
 .step-num{width:22px;height:22px;background:#22c55e;color:white;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
 .btn-signin{width:100%;padding:15px 24px;background:var(--text1);color:var(--paper);border:none;border-radius:14px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:all .2s;margin-bottom:14px}
+.login-version{margin-top:18px;padding:8px 14px;background:rgba(26,26,46,.05);border:1px solid rgba(26,26,46,.12);border-radius:10px;font-size:11px;color:rgba(26,26,46,.55);font-family:'JetBrains Mono',Consolas,monospace;letter-spacing:.5px;text-align:center;font-weight:600}
 .btn-signin:hover{background:#2a2a4e;transform:translateY(-1px)}
 .btn-signin:disabled{opacity:.6;cursor:not-allowed;transform:none}
 .btn-demo{background:transparent;border:1.5px solid var(--border);color:var(--text2);padding:11px 24px;border-radius:10px;font-size:13px;cursor:pointer;width:100%;transition:all .2s;font-family:'Inter',sans-serif}
@@ -362,6 +363,7 @@ body.dark-mode .item-act-btn.has-data{background:var(--accent);color:#fff}
     </button>
     <button class="btn-demo" id="btn-demo">Mode demo sans connexion</button>
     <div class="err" id="err-msg"></div>
+    <div class="login-version">v2.0 — 01/05/2026 10:18</div>
   </div>
 </div>
 
@@ -649,6 +651,14 @@ function loadSession() {
     return d;
   } catch(e) { return null; }
 }
+// Charge la session même si le token est expiré (pour récupérer l'email user et tenter une reconnexion silencieuse)
+function loadSessionAny() {
+  try {
+    var d = JSON.parse(localStorage.getItem(SESS_KEY) || 'null');
+    if (!d) return null;
+    return d;
+  } catch(e) { return null; }
+}
 
 // AUTH
 function initAuth() {
@@ -664,7 +674,11 @@ function initAuth() {
   gapi.load('client', function() {
     gapi.client.init({ discoveryDocs: [CFG.discDoc] })
     .then(function() {
-      S.tokenClient = google.accounts.oauth2.initTokenClient({
+      // Récupérer email user précédent pour donner un hint à Google (évite l'écran "Choisir un compte")
+      var prevSess = loadSessionAny();
+      var prevEmail = (prevSess && prevSess.user && prevSess.user.email) || '';
+      
+      var clientCfg = {
         client_id: CFG.clientId,
         scope: CFG.scopes,
         callback: function(resp) {
@@ -675,8 +689,13 @@ function initAuth() {
           showErr('Popup bloque: ' + (err.message || JSON.stringify(err)));
           resetBtn();
         }
-      });
-      S.tokenClient.requestAccessToken({ prompt: 'select_account' });
+      };
+      if (prevEmail) clientCfg.hint = prevEmail;
+      
+      S.tokenClient = google.accounts.oauth2.initTokenClient(clientCfg);
+      // prompt:'' = Google décide (silencieux si possible, sinon affiche écran)
+      // Si user déjà connu (hint), évite l'écran "Choisir un compte"
+      S.tokenClient.requestAccessToken({ prompt: prevEmail ? '' : 'select_account' });
     })
     .catch(function(e) { showErr('Init: ' + (e.message || JSON.stringify(e))); resetBtn(); });
   });
@@ -1744,8 +1763,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function autoLogin() {
+  // 1. Essayer la session en cache (token < 55 min)
   var saved = loadSession();
-  if (!saved) return;
+  if (saved) {
+    return restoreFromSession(saved);
+  }
+  // 2. Pas de session valide : essayer reconnexion silencieuse Google
+  // Conditions : on doit avoir une trace d'une session précédente (savoir que l'user était co)
+  var prevSess = loadSessionAny();
+  if (prevSess && prevSess.user && prevSess.user.email) {
+    trySilentReconnect(prevSess.user);
+  }
+  // Sinon : afficher la page de login normalement, l'utilisateur cliquera
+}
+
+function restoreFromSession(saved) {
   var check = setInterval(function() {
     if (typeof gapi === 'undefined' || typeof google === 'undefined') return;
     clearInterval(check);
@@ -1769,7 +1801,6 @@ function autoLogin() {
               var u = r.result || {};
               if (u.email) {
                 S.userEmail = u.email.toLowerCase();
-                // Remettre en cache la session avec l'email
                 var mergedUser = Object.assign({}, saved.user || {}, u);
                 saveSession(saved.token, mergedUser);
               }
@@ -1782,6 +1813,72 @@ function autoLogin() {
       }).catch(clearSession);
     });
   }, 150);
+}
+
+// Reconnexion silencieuse : demande un nouveau token sans afficher d'écran de consentement
+function trySilentReconnect(prevUser) {
+  var check = setInterval(function() {
+    if (typeof gapi === 'undefined' || typeof google === 'undefined' || !google.accounts) return;
+    clearInterval(check);
+    
+    // Indicateur visuel discret
+    showSilentReconnectIndicator();
+    
+    gapi.load('client', function() {
+      gapi.client.init({ discoveryDocs: [CFG.discDoc] }).then(function() {
+        var silentClient = google.accounts.oauth2.initTokenClient({
+          client_id: CFG.clientId,
+          scope: CFG.scopes,
+          hint: prevUser.email,  // Indice : l'email de l'utilisateur précédent
+          callback: function(resp) {
+            if (resp.error || !resp.access_token) {
+              hideSilentReconnectIndicator();
+              return;  // Échec silencieux : l'utilisateur cliquera "Se connecter"
+            }
+            // Succès : token obtenu sans interaction
+            gapi.client.setToken({ access_token: resp.access_token });
+            S.userEmail = (prevUser.email || '').toLowerCase();
+            txt('u-name', prevUser.name || prevUser.email || 'Connecte');
+            if (prevUser.picture) htm('u-av', '<img src="' + prevUser.picture + '">');
+            else txt('u-av', ((prevUser.name || 'U').charAt(0)).toUpperCase());
+            saveSession({ access_token: resp.access_token }, prevUser);
+            hideSilentReconnectIndicator();
+            show('topbar');
+            goHome();
+            preloadMeta();
+          },
+          error_callback: function(err) {
+            // Échec silencieux (utilisateur déconnecté de Google ou consentement requis)
+            hideSilentReconnectIndicator();
+            console.log('Silent reconnect failed:', err);
+          }
+        });
+        // prompt: 'none' = pas d'interface, échoue si interaction nécessaire
+        try {
+          silentClient.requestAccessToken({ prompt: 'none' });
+        } catch(e) {
+          hideSilentReconnectIndicator();
+          console.log('Silent reconnect error:', e);
+        }
+      }).catch(function() { hideSilentReconnectIndicator(); });
+    });
+  }, 150);
+}
+
+function showSilentReconnectIndicator() {
+  var ind = el('silent-reconnect');
+  if (ind) { ind.style.display = 'flex'; return; }
+  // Créer l'indicateur
+  var d = document.createElement('div');
+  d.id = 'silent-reconnect';
+  d.style.cssText = 'position:fixed;top:16px;right:16px;background:rgba(13,27,46,.92);color:#fff;padding:10px 16px;border-radius:24px;font-size:.78rem;z-index:9999;display:flex;align-items:center;gap:10px;box-shadow:0 4px 16px rgba(0,0,0,.3);backdrop-filter:blur(8px);';
+  d.innerHTML = '<div style="width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;"></div><span>Reconnexion automatique…</span>';
+  document.body.appendChild(d);
+}
+
+function hideSilentReconnectIndicator() {
+  var ind = el('silent-reconnect');
+  if (ind) ind.style.display = 'none';
 }
 
 // BROWSER
